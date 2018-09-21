@@ -1,0 +1,65 @@
+.contenedorGrid{
+  padding: 8vh;
+  transform: translate(0%, 0%);
+  -webkit-transform: translate(0%, 0%);
+}
+.card{
+  background-color: #F2F2F3;
+  width: 85%;
+}
+
+
+.card .imagen{
+  transform: translate(15%, 0%);
+  -webkit-transform: translate(15%, 0%);
+}
+
+.contenedor-busqueda{
+  padding: 5vh;
+}
+.busqueda{
+  position: center;
+  transform: translate(0%, 0%);
+  -webkit-transform: translate(15%, 0%);
+  width: 70%;
+}
+
+.lista-maquinas{
+  position: center;
+  padding: 5vh;
+  transform: translate(0%, 0%);
+  -webkit-transform: translate(20%, 0%);
+  width: 100%;
+
+}
+
+.not-found{
+  width: 85%;
+   filter:brightness(0.5);
+}
+@media only screen and (max-width: 1000px) {
+  .lista-maquinas{
+    transform: translate(0%, 0%);
+    -webkit-transform: translate(15%, 0%);
+  }
+}
+@media only screen and (max-width: 800px) {
+  .lista-maquinas{
+    transform: translate(0%, 0%);
+    -webkit-transform: translate(10%, 0%);
+  }
+  .not-found{
+    width: 100%;
+     filter:brightness(0.5);
+  }
+}
+@media only screen and (max-width: 690px) {
+  .lista-maquinas{
+    transform: translate(0%, 0%);
+    -webkit-transform: translate(0%, 0%);
+  }
+  .not-found{
+    width: 100%;
+     filter:brightness(0.5);
+  }
+}

@@ -1,0 +1,43 @@
+.itemDescripcion{
+  padding: 8vh;
+  padding-bottom: 1vh;
+  display: block;
+}
+.title{
+margin: -30% 0 0 5%;
+-webkit-transform: translate(-15%, 0%);
+
+}
+
+.imagen-item{
+  width: 55%;
+}
+.appBar{
+  height: 10vh;
+  background-color: white;
+  text-decoration: none;
+}
+.botones{
+  width: 100%;
+  position:absolute;
+  padding: 3.5vh;
+  display: inline;
+}
+.description{
+  width: 40%;
+  float: right;
+  text-align : center;
+
+}
+.historial-header{
+  padding: 3vh;
+  -webkit-transform: translate(35%,10%);
+}
+.filtrarFechas{
+  padding: 3vh;
+  display: inline-block;
+  -webkit-transform: translate(90%,8%);
+}
+.acordeon{
+  padding: 5vh;
+}
