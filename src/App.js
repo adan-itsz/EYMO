@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import './App.css';
+import './estilo/App.css';
 import {Route, BrowserRouter, Link, Redirect, Switch,Router} from 'react-router-dom';
-import RouterPrincipal from './router.js';
-import Maquinas from './menuMaquinas.js';
+import RouterPrincipal from './routers/router.js';
+import Maquinas from './componentes/menuMaquinas.js';
+import BarraLateral from './componentes/menu.js';
 class App extends Component {
   constructor(){
     super()
@@ -11,7 +12,10 @@ class App extends Component {
 
   render() {
     return (
+      <div>
+      <BarraLateral/>
       <RouterPrincipal/>
+      </div>
     );
   }
 }

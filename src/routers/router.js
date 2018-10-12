@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Route, BrowserRouter, Switch,Router} from 'react-router-dom'
-import Maquinas from './menuMaquinas.js'
-import Buscar from './busqueda.js';
-import ItemMaquina from './item-maquina.js';
+import Maquinas from '../componentes/menuMaquinas.js'
+import Buscar from '../componentes/busqueda.js';
+import ItemMaquina from '../componentes/item-maquina.js';
 class RouterPrincipal extends Component {
   constructor(){
     super()
@@ -10,6 +10,7 @@ class RouterPrincipal extends Component {
 
   render() {
     return (
+      <div className='contenedor-opciones'>
       <BrowserRouter>
         <Switch >
         <Route exact path="/" component={Maquinas}/>
@@ -18,6 +19,7 @@ class RouterPrincipal extends Component {
         <Route path="/MaqItem/:id" component={ItemMaquina}/>
       </Switch>
       </BrowserRouter>
+      </div>
     );
   }
 }

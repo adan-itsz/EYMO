@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image,Icon,Container,Header,Divider,List,Select,Accordion } from 'semantic-ui-react'
-import './item-maquina.css';
+import '../estilo/item-maquina.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -34,12 +34,7 @@ class ItemMaquina extends Component {
 
     return (
      <div className='contenido-card'>
-      <div className='appBar'>
-        <div className='botones'>
-          <Link to={'/busqueda/1'}><Icon name='arrow left' color='grey' size='big' /></Link>
-          <Icon style={{paddingRight:'10vh',float:'right'}}name='heart outline' color='grey' size='big' />
-        </div>
-      </div>
+
     <List>
       <List.Item>
       <div className='itemDescripcion'>
@@ -82,7 +77,7 @@ class ItemMaquina extends Component {
     </List.Item>
     <List.Item>
         <div className='acordeon'>
-        
+
         </div>
     </List.Item>
     </List>

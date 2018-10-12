@@ -1,0 +1,12 @@
+@import '~antd/dist/antd.css';
+
+.contenedorPrincipal{
+  background-color: #F1F1F1;
+
+}
+
+.contenedor-opciones{
+  width: 95%;
+  padding-top: 8vh;
+  padding-left: 10vh;
+}

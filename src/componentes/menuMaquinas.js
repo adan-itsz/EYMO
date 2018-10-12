@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Card, Icon,  Image,Header } from 'semantic-ui-react';
 import {Route,Link} from 'react-router-dom';
-import './maquinas.css'
+import '../estilo/maquinas.css'
 class Maquinas extends Component {
   constructor(){
     super()
