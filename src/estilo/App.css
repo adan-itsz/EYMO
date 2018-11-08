@@ -6,7 +6,34 @@
 }
 
 .contenedor-opciones{
-  width: 95%;
-  padding-top: 8vh;
-  padding-left: 10vh;
+  width: 100%;
+
+}
+
+.botonMenu{
+  top: 3vh;
+  left: 3vh;
+  position: absolute;
+}
+.AppBarMenu{
+  position: relative;
+}
+
+
+.agregarComponentes{
+  width: 20%;
+  position: absolute;
+  left: 40%;
+  bottom: 15%;
+}
+.botonplus{
+  width: 100px;
+  height: 80px;
+  text-align: center;
+}
+
+.lista-Componentes{
+  position: absolute;
+  bottom: 40vh;
+  left: 60%;
 }

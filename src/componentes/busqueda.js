@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {Route,Link} from 'react-router-dom';
+import axios from 'axios';
 
 const styles = {
   card: {
@@ -62,13 +63,25 @@ const maquinariaLista={
 
 class Buscar extends Component {
   constructor(match){
+
+
     super()
     console.log(maquinariaLista);
     this.state={
       query:'',
-      resultados:maquinariaLista.datos,
-      idArea:`${match.match.params.id}`
+      resultados:[],
+      ArrayMAquinas: [],
+      idArea:`${match.match.params.id}`,
+      TodosComponentes:[]
     }
+    axios.post(`http://localhost:4000/ConsultaMaquina`,{Area:`${match.match.params.id}`})
+      .then(res => {
+        console.log("lado del cleinte :: "+res.data);
+        this.setState({
+          resultados:res.data.Maquinas,
+          TodosComponentes: res.data.Componentes
+        })
+      })
   }
 
 
@@ -103,6 +116,7 @@ class Buscar extends Component {
 
   render() {
     var list=this.state.resultados.length>0;
+    var ArraComp = this.state.TodosComponentes
     return (
       <div className='contenedor-busqueda'>
         <div className='busqueda'>
@@ -116,8 +130,7 @@ class Buscar extends Component {
           <div className='lista-maquinas'>
             <List style={{textAlign:'center'}}relaxed='very'>
                {this.state.resultados.map((it,key)=>{
-                 var desResumen=it.description.substring(0,126);
-                 return(<Carta datos={it} description={desResumen} key={key}/>)
+                 return(<Carta datos={it} Componente={ArraComp[key]}  key={key}/>)
                })}
            </List>
           </div>
@@ -133,22 +146,28 @@ class Buscar extends Component {
 
 class Carta extends Component{
   render(){
+    const newTo = {
+      pathname: `/admin/MaqItem/`+this.props.key,
+      Maquina: this.props.datos,
+      CompontesM: this.props.Componente
+        };
     return(
       <List.Item>
         <Card style={{maxWidth: 545,margin:0}}>
         <CardActionArea>
-        <Link id='agregarLibro' to={`/MaqItem/`+this.props.key}>
+        <Link id='agregarLibro' to={newTo}>
             <CardMedia
               style={{height: 240}}
-              image={this.props.datos.img}
-              title={this.props.datos.title}
+              image={this.props.datos.Imagen}
+              title={this.props.datos.Marca}
             />
             <CardContent>
               <Typography gutterBottom variant="headline" component="h2">
-                 {this.props.datos.head}
+                 {this.props.datos.Nombre}
               </Typography>
               <Typography component="p">
-              {this.props.description}
+               Area : {this.props.datos.Area} &nbsp;&nbsp;&nbsp;  Año de instalacion : {this.props.datos.AnoInstalacion} &nbsp;&nbsp;&nbsp;  Corriente : {this.props.datos.Corriente}
+
               </Typography>
             </CardContent>
           </Link>

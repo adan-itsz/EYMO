@@ -17,7 +17,31 @@ const months = ["Enero","Febrero","Marzo"];
 
 class ItemMaquina extends Component {
   constructor(props){
+
     super(props)
+
+    var self = this;
+    axios.post(`http://localhost:4000/TomarHistorial`,{path:this.props.location.Maquina.Area+"/"+this.props.location.Maquina})
+      .then(res => {
+        console.log("lado del cleinte :: "+res.data);
+        self.setState({
+          AreasDisponibles: res.data.Areas,
+        });
+      })
+
+    try {
+
+      this.setState({
+         Maquina: this.props.location.Maquina,
+         Componentes:this.props.location.Componentes,
+       })
+
+    } catch (e) {
+
+    }
+
+
+
   }
   state = { activeIndex: 0 }
 
@@ -38,13 +62,13 @@ class ItemMaquina extends Component {
     <List>
       <List.Item>
       <div className='itemDescripcion'>
-        <img className='imagen-item' src='https://www.arburg.com/fileadmin/redaktion/bilder/vollbild_650x320px/110189_cube_2900_k_2016.jpg' />
+        <img className='imagen-item' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTisjG7YVQiVLtLH4paHwwm-n14Ync6Tq7i0mB0GUHYAOUctWro' />
         <List>
         <List.Item>
           <div className='title'>
             <Header as='h2' icon  style={{float:'right'}}>
               <Icon name='settings' />
-              Maquina MCubicos 18
+              {this.props.location.Maquina.Nombre}
               <Header.Subheader>Area 4</Header.Subheader>
             </Header>
           </div>
@@ -75,17 +99,40 @@ class ItemMaquina extends Component {
         <Select placeholder='Mes' options={months} />
       </div>
     </List.Item>
-    <List.Item>
-        <div className='acordeon'>
-
-        </div>
-    </List.Item>
+    {this.state.ArrayComponentes.map((it,key)=>{
+      var desResumen=it.Tipo;
+      return(<Carta datos={it} description={desResumen} key={key}/>)
+    })}
     </List>
       </div>
     );
   }
 }
 
+class Carta extends Component{
+  render(){
+    return(
+      <List.Item>
+      <List.Header>{this.props.datos.Tipo}</List.Header>
+
+        <Card>
+        <CardActionArea>
+
+            <CardContent>
+              <Typography gutterBottom  component="h4">
+                 {this.props.datos.Modelo_Componente}
+              </Typography>
+              <Typography component="p">
+              {this.props.FechaI_Componente}
+              </Typography>
+            </CardContent>
+        </CardActionArea>
+      </Card>
+    </List.Item>
+
+    );
+  }
+}
 
 
 

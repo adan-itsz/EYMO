@@ -1,0 +1,23 @@
+#login-form h2 {
+  color: #5C8798;
+}
+
+#login-form button{
+  background-color: #2C434B!important;
+}
+
+#login-password{
+  margin-bottom: 10%;
+}
+
+@media (max-width: 1024px) {
+  #login-form{
+    margin-top: 40%;
+  }
+}
+
+.contenedor-login{
+  left: 40%;
+  top: 30%;
+  position: absolute;
+}
