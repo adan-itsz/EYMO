@@ -9,7 +9,12 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import axios from 'axios';
 
 
 const months = ["Enero","Febrero","Marzo"];
@@ -19,16 +24,6 @@ class ItemMaquina extends Component {
   constructor(props){
 
     super(props)
-
-    var self = this;
-    axios.post(`http://localhost:4000/TomarHistorial`,{path:this.props.location.Maquina.Area+"/"+this.props.location.Maquina})
-      .then(res => {
-        console.log("lado del cleinte :: "+res.data);
-        self.setState({
-          AreasDisponibles: res.data.Areas,
-        });
-      })
-
     try {
 
       this.setState({
@@ -40,10 +35,19 @@ class ItemMaquina extends Component {
 
     }
 
-
+    axios.post(`http://localhost:4000/MtoMaquina`,{Area:this.props.location.Maquina.Area,Maquina:this.props.location.Maquina.Nombre})
+      .then(res => {
+        console.log("lado del cleinte :: "+res.data);
+        this.setState({
+          MtoPorMaquina: res.data.MantenimientosPorMaquina,
+        });
+      })
 
   }
-  state = { activeIndex: 0 }
+  state = {
+    activeIndex: 0,
+    MtoPorMaquina:[],
+ }
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps
@@ -55,6 +59,9 @@ class ItemMaquina extends Component {
 
   render() {
     const { activeIndex } = this.state
+      let open=true;
+
+
 
     return (
      <div className='contenido-card'>
@@ -69,7 +76,7 @@ class ItemMaquina extends Component {
             <Header as='h2' icon  style={{float:'right'}}>
               <Icon name='settings' />
               {this.props.location.Maquina.Nombre}
-              <Header.Subheader>Area 4</Header.Subheader>
+              <Header.Subheader>Area {this.props.location.Maquina.Area}</Header.Subheader>
             </Header>
           </div>
         </List.Item>
@@ -99,12 +106,21 @@ class ItemMaquina extends Component {
         <Select placeholder='Mes' options={months} />
       </div>
     </List.Item>
-    {this.state.ArrayComponentes.map((it,key)=>{
-      var desResumen=it.Tipo;
-      return(<Carta datos={it} description={desResumen} key={key}/>)
-    })}
+      { open ?
+        <div className='contenido-card'>
+          <List divided verticalAlign='middle' size="big">
+            {this.state.MtoPorMaquina.map((it,key)=>{
+              return(<Carta datos={it}  key={key}/>)
+            })}
+          </List>
+        </div> :
+        <div className='contenido-card'>
+
+        </div>
+      }
     </List>
       </div>
+
     );
   }
 }
@@ -112,24 +128,14 @@ class ItemMaquina extends Component {
 class Carta extends Component{
   render(){
     return(
-      <List.Item>
-      <List.Header>{this.props.datos.Tipo}</List.Header>
-
-        <Card>
-        <CardActionArea>
-
-            <CardContent>
-              <Typography gutterBottom  component="h4">
-                 {this.props.datos.Modelo_Componente}
-              </Typography>
-              <Typography component="p">
-              {this.props.FechaI_Componente}
-              </Typography>
-            </CardContent>
-        </CardActionArea>
-      </Card>
-    </List.Item>
-
+      <List.Item className="itemLista">
+        <List.Content>
+          <List.Header style={{fontSize: "20px"}}>{this.props.datos.Encargado}</List.Header>
+          <List.Description as='a'>Area : {this.props.datos.Area}</List.Description>
+          <List.Description as='a'>Tiempo  : {this.props.datos.Tiempo} minutos </List.Description>
+          <List.Description as='a'>Costo : {this.props.datos.Costo}</List.Description>
+        </List.Content>
+      </List.Item>
     );
   }
 }

@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { List,Label } from 'semantic-ui-react';
 import * as firebase from 'firebase';
+
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -212,20 +213,13 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     //Metodo sera eliminado para emplazarlo con un server
    subirDatos=()=>{
      var self = this;
-     if(this.state.NombreM.length !=0 && this.state.AreaM.length){
-       axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
-         .then(res => {
-           console.log("lado del cleinte :: "+res.data);
-           self.setState({
-             visible: false,
-           });
-         })
-     }
-     else{
-       alert("Tienes que llenar todos los campos");
-     }
-
-
+     axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
+       .then(res => {
+         console.log("lado del cleinte :: "+res.data);
+         self.setState({
+           visible: false,
+         });
+       })
    }
    subirMantenimiento=(e)=>{
      var self = this;
@@ -233,7 +227,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
        .then(res => {
          console.log("lado del cleinte :: "+res.data);
          self.setState({
-           visible3: false,
+           visible: false,
          });
        })
    }
@@ -246,7 +240,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
      window.location.href = "/admin/";
        break;
      case "2":
-     window.location.href = "/admin/Mantenimientos";
+     window.location.href = "/admin/maquinas";
 
        break;
      case "3":

@@ -34,6 +34,87 @@ app.get('/', function(req, res){
   });
   */
 
+
+
+
+
+app.post('/MtoMaquina', function (req, res) {
+
+  var ArrayAux=[];
+  let self=this;
+  var refDB=dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Mantenimientos");
+  var promise=new Promise(
+    function(resolve,reject){
+        refDB.on('value', snapshot=> {
+          if(snapshot.exists()){
+            snapshot.forEach(function(snapchild){
+              resolve(ArrayAux = ArrayAux.concat([{key:snapchild.key,Area:snapchild.val().Area,Costo:snapchild.val().Costo,Encargado:snapchild.val().Encargado,Maquina:snapchild.val().Maquina,Nueva:snapchild.val().Nueva,Remplazo:snapchild.val().Remplazo,Tiempo:snapchild.val().Tiempo,TipoMantenimiento:snapchild.val().TipoMantenimiento}]))
+              })
+          }
+          else{
+            console.log('hello');
+            resolve();
+          }
+        });
+
+      })
+      promise.then(
+        function(){
+          console.log("Mantenimientos"+ArrayAux);
+          res.send({MantenimientosPorMaquina:ArrayAux});
+
+        }
+      )
+
+
+  });
+
+  app.post('/TomarHistorial', function (req, res) {
+
+    var ArrayAux=[];
+    let self=this;
+    var refDB=dataBase.ref("Ing_Tala/Areas/");
+    var promise=new Promise(
+      function(resolve,reject){
+          refDB.on('value', snapshot=> {
+            if(snapshot.exists()){
+              snapshot.forEach(function(snapchild){
+                if(snapchild.exists()){
+                snapchild.forEach(function(babychild){
+                    if(babychild.val().Mantenimientos){
+                    resolve(ArrayAux = ArrayAux.concat([{Mantenimientos:babychild.val().Mantenimientos}]))
+                    }
+                  })
+                  }
+                })
+            }
+            else{
+              console.log('hello');
+              resolve();
+            }
+          });
+
+        })
+        promise.then(
+          function(){
+            var Arr = [];
+            ArrayAux.forEach(snap =>{
+
+              var output = Object.keys(snap.Mantenimientos).map(function(key) {
+
+              Arr.push({key: key, data: snap.Mantenimientos[key]})     ;
+              })
+
+            });
+
+            res.send({Mantenimientos:Arr});
+
+          }
+        )
+
+
+    });
+
   app.post('/ConsultaMaquina', function (req, res) {
     console.log(req.body.Area);
 
@@ -66,7 +147,6 @@ app.get('/', function(req, res){
               })
 
             });
-            console.log(ArrayAux);
 
             res.send({Maquinas:ArrayAux,Componentes:Arr});
 
@@ -82,6 +162,8 @@ app.get('/', function(req, res){
 
 
 app.post('/Subir_MaquinaNueva', function (req, res) {
+
+
 
   var refDa = dataBase.ref("Ing_Tala/Areas/"+req.body.AreaM+"/"+req.body.NombreM);
   refDa.set({
@@ -106,10 +188,10 @@ app.post('/Subir_MaquinaNueva', function (req, res) {
       CorrienteComponente:req.body.ArrayComponentes[i].Corriente_Componente,
     });
 
+    }
+
+
   }
-
-
-}
 );
 
 app.post('/Subir_Mantenimiento', function (req, res) {

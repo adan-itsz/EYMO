@@ -4,7 +4,7 @@ import Maquinas from '../componentes/menuMaquinas.js'
 import Buscar from '../componentes/busqueda.js';
 import ItemMaquina from '../componentes/item-maquina.js';
 import BarraLateral from '../componentes/menu.js';
-
+import MantenimientoItem from '../componentes/Mantenimientos.js';
 class RouterPrincipal extends Component {
   constructor(){
     super()
@@ -17,8 +17,8 @@ class RouterPrincipal extends Component {
 
       <BrowserRouter>
         <Switch >
-        <Route exact path="/admin/maquinas" component={Maquinas}/>
-        <Route path="/admin/maquinas" component={Maquinas}/>
+        <Route exact path="/admin/" component={Maquinas}/>
+        <Route path="/admin/Mantenimientos" component={MantenimientoItem}/>
         <Route path="/admin/busqueda/:id" component={Buscar}/>
         <Route path="/admin/MaqItem/:id" component={ItemMaquina}/>
       </Switch>
