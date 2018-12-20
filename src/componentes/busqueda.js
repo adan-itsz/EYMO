@@ -147,9 +147,9 @@ class Buscar extends Component {
 class Carta extends Component{
   render(){
     const newTo = {
-      pathname: `/admin/MaqItem/`+this.props.key,
+      pathname: `/user/MaqItem/`+this.props.key,
       Maquina: this.props.datos,
-      CompontesM: this.props.Componente
+      Componentes: this.props.Componente
         };
     return(
       <List.Item>

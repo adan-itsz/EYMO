@@ -13,6 +13,7 @@ admin.initializeApp({
 });
 
 var dataBase = admin.database();
+var Auth = admin.auth();
 var bucket = admin.storage().bucket();
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,6 +38,145 @@ app.get('/', function(req, res){
 
 
 
+app.post('/ConsultaAnalitics', function (req, res) {
+
+  var ArrayAux=[];
+  let self=this;
+  var refDB=dataBase.ref("Ing_Tala/Areas/");
+  var promise=new Promise(
+    function(resolve,reject){
+        refDB.on('value', snapshot=> {
+          if(snapshot.exists()){
+            snapshot.forEach(function(child){
+            resolve(ArrayAux = ArrayAux.concat(child.val()))
+            })
+          }
+          else{
+            console.log('hello');
+            resolve();
+          }
+        });
+
+      })
+      promise.then(
+        function(){
+
+        var a = obtenerMaquinas(ArrayAux);
+        var b = obtenerComponentes(ArrayAux);
+        var c =  obtenerAreas(ArrayAux);
+        var d =  obtenerMantenimientos(ArrayAux);
+
+
+          res.send({TotalMaquinas:a, TotalComponentes:b,TotalAreas:c,TotalMantenimientos:d});
+
+        }
+      )
+
+
+  });
+
+
+function  obtenerMaquinas(data){
+    var count=0;
+    for (var i = 0; i < data.length; i++) {
+     count += Object.keys(data[i]).length ;
+    }
+    return(count);
+  }
+function  obtenerComponentes(data){
+    var count=0;
+    var count2=0;
+    for (var i = 0; i < data.length; i++) {
+     count = Object.keys(data[i]).length ;
+     for (var j = 0; j < count; j++) {
+       var aux = Object.keys(data[i])[j];
+         count2 += Object.keys(data[i][aux].Componentes).length ;
+     }
+    }
+    return(count2);
+  }
+function  obtenerMantenimientos(data){
+    var count=0;
+    var count2=0;
+    for (var i = 0; i < data.length; i++) {
+     count = Object.keys(data[i]).length ;
+     for (var j = 0; j < count; j++) {
+       var aux = Object.keys(data[i])[j];
+       if (data[i][aux].Mantenimientos) {
+
+       count2 += Object.keys(data[i][aux].Mantenimientos).length ;
+        }
+
+     }
+
+    }
+    return(count2);
+  }
+function  obtenerAreas(data){
+    return(data.length);
+  }
+
+
+  app.post('/CompoMaquina', function (req, res) {
+
+    var ArrayAux=[];
+    let self=this;
+    var refDB=dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina);
+    var promise=new Promise(
+      function(resolve,reject){
+          refDB.on('value', snapshot=> {
+            if(snapshot.exists()){
+                resolve(ArrayAux = ArrayAux.concat([{Componentes:snapshot.val().Componentes}]))
+            }
+            else{
+              console.log('hello');
+              resolve();
+            }
+          });
+        })
+        promise.then(
+          function(){
+
+            res.send({ComponentesPorMaquina:ArrayAux});
+
+          }
+        )
+
+
+    });
+
+
+
+    app.post('/Subir_Componente', function (req, res) {
+
+
+        var refDaComponentes = dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Componentes/"+req.body.Tipo);
+
+        var PushComponentes=refDaComponentes.push();
+
+        PushComponentes.set({
+          Tipo: req.body.Tipo,
+          Modelo:req.body.Modelo_Componente,
+          FechaInstalacion:req.body.FechaI_Componente,
+          EstadoPieza:req.body.Estado_Componente,
+          CorrienteComponente:req.body.Corriente_Componente,
+
+        });
+        res.send("Datos subidos exitosamente");
+
+    }
+    );
+    app.post('/Eliminar_Componente', function (req, res) {
+
+
+        var refDaComponentes = dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Componentes/"+req.body.Tipo);
+
+      refDaComponentes.child(req.body.key).remove();
+
+        res.send("Datos eliminados exitosamente");
+
+    }
+    );
 
 app.post('/MtoMaquina', function (req, res) {
 
@@ -126,6 +266,7 @@ app.post('/MtoMaquina', function (req, res) {
           refDB.on('value', snapshot=> {
             if(snapshot.exists()){
               snapshot.forEach(function(child){
+                console.log("Cada hijo"+child.val().AnoInstalacion);
               resolve(ArrayAux = ArrayAux.concat([{AnoInstalacion:child.val().AnoInstalacion, Area:child.val().Area, Corriente:child.val().Corriente, Imagen:child.val().Imagen, Marca : child.val().Marca, Nombre: child.val().Nombre, Componentes : child.val().Componentes}]))
               })
             }
@@ -142,9 +283,8 @@ app.post('/MtoMaquina', function (req, res) {
             ArrayAux.forEach(snap =>{
               var ARCom = snap.Componentes;
 
-              var output = Object.keys(ARCom.Indicador_VF).map(function(key) {
-              Arr.push({key: key, data: ARCom.Indicador_VF[key]})     ;
-              })
+              Arr.push(ARCom)     ;
+
 
             });
 
@@ -190,10 +330,37 @@ app.post('/Subir_MaquinaNueva', function (req, res) {
 
     }
 
+    res.send("Subido exitoso");
+
 
   }
 );
 
+
+app.post('/Subir_Agente', function (req, res) {
+
+  Auth.createUser({
+    email: req.body.CorreoA,
+    password:req.body.PassA,
+    displayName:req.body.NombreA,
+  })
+
+    var refDaComponentes = dataBase.ref("Ing_Tala/");
+
+    var PushComponentes=refDaComponentes.push();
+
+    PushComponentes.set({
+      TipoMantenimiento: req.body.TipoMan,
+      Costo:req.body.Costo,
+      Encargado:req.body.Encargado,
+      Tiempo:req.body.Tiempo,
+      Remplazo:req.body.Remplazo,
+      Nueva:req.body.Nueva,
+      Area:req.body.Area,
+      Maquina:req.body.Maquina,
+    });
+}
+);
 app.post('/Subir_Mantenimiento', function (req, res) {
 
 
@@ -211,10 +378,6 @@ app.post('/Subir_Mantenimiento', function (req, res) {
       Area:req.body.Area,
       Maquina:req.body.Maquina,
     });
-
-
-
-
 }
 );
 

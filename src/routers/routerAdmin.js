@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {Route, BrowserRouter, Switch,Router} from 'react-router-dom'
-import Maquinas from '../componentes/menuMaquinas.js'
+import Analitics from '../componentes/Analitics.js'
 import Buscar from '../componentes/busqueda.js';
 import ItemMaquina from '../componentes/item-maquina.js';
-import BarraLateral from '../componentes/menu.js';
+import BarraLateral from '../componentes/menuSuperUser.js';
 import MantenimientoItem from '../componentes/Mantenimientos.js';
-class RouterPrincipal extends Component {
+class UserRoutes extends Component {
   constructor(){
     super()
   }
@@ -17,9 +17,9 @@ class RouterPrincipal extends Component {
 
       <BrowserRouter>
         <Switch >
-        <Route exact path="/admin/" component={Maquinas}/>
+        <Route exact path="/admin/" component={Analitics}/>
         <Route path="/admin/Mantenimientos" component={MantenimientoItem}/>
-        <Route path="/admin/busqueda/:id" component={Buscar}/>
+        <Route path="/admin/Agentes/:id" component={Buscar}/>
         <Route path="/admin/MaqItem/:id" component={ItemMaquina}/>
       </Switch>
       </BrowserRouter>
@@ -28,7 +28,4 @@ class RouterPrincipal extends Component {
   }
 }
 
-
-
-
-export default RouterPrincipal;
+export default UserRoutes;

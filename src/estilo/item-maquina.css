@@ -41,3 +41,45 @@ margin: -30% 0 0 5%;
 .acordeon{
   padding: 5vh;
 }
+.contenedorGrid{
+  padding: 8vh;
+    width: 100%;
+  background-color: #F1F0F0;
+}
+.cardCompo{
+  background-color: #D8D8D8;
+  width: 20%;
+  height: 90px;
+  margin-left: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.botonesAdd {
+  margin-left: 30%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #C6C5C5;
+}
+.botonesAdd > *:first-child  {
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.botonesAdd > *:last-child  {
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#HeaderComponentes{
+  margin-left: 40%;
+  margin-right: 10px;
+}
+
+.divid{
+width: 100%; /* Line width */
+background-color: #CAC9C9; /* Line color */
+height: 1px; /* Override in-line if you want specific height. */
+float: left; /* Causes the line to float to left of content. You can instead use position:absolute or display:inline-block if this fits better with your design */
+
+}

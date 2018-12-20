@@ -11,7 +11,7 @@ function PrivateRouteAdmin ({component: Component, authed,user, ...rest}) {
       {...rest}
       render={(props) => authed === true &&  user === 'adan1995a@gmail.com'
         ? <Component {...props} />
-        : <Redirect to={{pathname: '/useewr' , state: {from: props.location}}} />}
+        : <Redirect to={{pathname: '/user' , state: {from: props.location}}} />}
     />
   )
 }

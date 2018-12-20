@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import '../estilo/App.css';
 import {ref} from '../const.js'
+import { Select } from 'semantic-ui-react'
 import {Route, BrowserRouter, Link, Redirect, Switch,Router} from 'react-router-dom';
-import { Menu, Icon, Button,Form,FormItem, Radio,Dropdown, Modal } from 'antd';
+import { Menu, Icon, Button,Form, Radio,Dropdown, Modal } from 'antd';
 import 'antd/dist/antd.css';  // or 'antd/dist/antd.less'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -116,7 +117,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
      NombreComponente:"",
      visible: false,
      ArrayComponentes: [],
-
+     EstadoActual:"activa",
    });
  }
  handleCancelModal2 = (e) => { //cierra el segundo modal (datos de componentes)
@@ -136,6 +137,8 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     this.setState({
       visible: true,
     });
+
+
   }
   showModalReporte = () => {
     this.setState({
@@ -148,6 +151,20 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     this.setState({
       NombreM:event.target.value
     })
+  }
+  EstadoActual =(event) =>{
+
+    if (event.key=="1") {
+      this.setState({
+        EstadoActual:"Nueva"
+      })
+    }
+    else {
+      this.setState({
+        EstadoActual:"Usada"
+      })
+    }
+
   }
   AreaM =(event) =>{
     this.setState({
@@ -165,16 +182,22 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     })
   }
   CorrienteM =(event) =>{
-    this.setState({
-      CorrienteM:event.target.value
-    })
+    if (event.key=="1") {
+      this.setState({
+        CorrienteM:"AC"
+      })
+    }
+    else {
+      this.setState({
+        CorrienteM:"DC"
+      })
+    }
+
   }
 //**** Fin de los campos de cada maquinas
 
 //*** Validamos datos de cada maquina
-  validar =() =>{
-    this.subirDatos();
-   }
+
    validarComponentes =() =>{
      this.subirDatos();
     }
@@ -212,18 +235,31 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     //Metodo sera eliminado para emplazarlo con un server
    subirDatos=()=>{
      var self = this;
+     if(this.state.ArrayComponentes.length){
      if(this.state.NombreM.length !=0 && this.state.AreaM.length){
        axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
          .then(res => {
            console.log("lado del cleinte :: "+res.data);
            self.setState({
              visible: false,
+             NombreM:"",
+             AreaM:"",
+             MarcaM:"",
+             AnoInstalacionM:"",
+             CorrienteM:"",
+             ArrayComponentes:[],
+             ImganeURl:"",
            });
          })
      }
      else{
        alert("Tienes que llenar todos los campos");
      }
+   }
+   else {
+     alert("Tienes que agrgar por lo menos un componente");
+
+   }
 
 
    }
@@ -243,10 +279,10 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
    console.log('click ', e);
    switch (e.key) {
      case "1":
-     window.location.href = "/admin/";
+     window.location.href = "/user/";
        break;
      case "2":
-     window.location.href = "/admin/Mantenimientos";
+     window.location.href = "/user/Mantenimientos";
 
        break;
      case "3":
@@ -285,6 +321,8 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
 
    }
 
+
+
    handleSubmitMantenimiento =(e)=>{
      var self = this;
      axios.post(`http://localhost:4000/Subir_Mantenimiento`,{TipoMan:this.TipoMan.value,Costo:this.Costo.value,Encargado:this.Encargado.value,Tiempo:this.Tiempo.value,Remplazo:this.Remplazo.value,Nueva:this.Nueva.value,Area:this.AreaMtm.value,Maquina:this.MaquinaMtm.value})
@@ -303,12 +341,24 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
     const FormItem = Form.Item;
+    const Corri = (
+        <Menu onClick={this.CorrienteM}>
+        <Menu.Item key="1">AC</Menu.Item>
+        <Menu.Item key="2">DC</Menu.Item>
+        </Menu>
+      );
+      const EstadoM = (
+          <Menu onClick={this.EstadoActual}>
+          <Menu.Item key="1">Nueva</Menu.Item>
+          <Menu.Item key="2">Usada</Menu.Item>
+          </Menu>
+        );
+
 
     const menu = (
       <Menu onClick={this.handleMenuClick}>
         <Menu.Item key="1">Maquina</Menu.Item>
         <Menu.Item key="2">Mantenimiento</Menu.Item>
-
       </Menu>
     );
     return (
@@ -340,7 +390,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         <Modal
                  title="Basic Modal"
                  visible={this.state.visible}
-                 onOk={this.validar}
+                 onOk={this.subirDatos}
                  onCancel={this.handleCancelModal}
                  width="900px"
                >
@@ -352,17 +402,26 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
                  <datalist id="Areas">
                  {this.state.AreasDisponibles.map((it,key)=>{
                    return(<option value={it}></option>)})}
-
                  </datalist>
                  <h4>Marca</h4>
                  <input onChange={this.MarcaM}></input>
-
                  <h4>Año de instalacion</h4>
-                 <input onChange={this.AnoM}></input>
+                 <input type="month" onChange={this.AnoM}></input>
+                 <div className="dropC">
+                 <h4>Tipo de corriente</h4>
+                 <Dropdown id="dropC" overlay={Corri}>
+                     <a className="ant-dropdown-link">
+                        {this.state.CorrienteM}<Icon type="down" />
+                     </a>
+                  </Dropdown>
+                  </div>
+                  <h4>Estado de la maquina</h4>
 
-                 <h4>Tipo corriente</h4>
-                 <input onChange={this.CorrienteM}></input>
-                 <h4>Subir Imagen</h4>
+                  <Dropdown id="dropC" overlay={EstadoM}>
+                      <a className="ant-dropdown-link">
+                         {this.state.EstadoActual}<Icon type="down" />
+                      </a>
+                   </Dropdown>                 <h4>Subir Imagen</h4>
                  <input type='file' onChange={this.ImagenChange.bind(this)}/>
 
 
@@ -395,7 +454,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
 
        </Modal>
        <Modal
-                title="Basic Modal"
+                title="Nuevo Componente"
                 visible={this.state.visible2}
                 onOk={this.handleSubmit}
                 onCancel={this.handleCancelModal2}

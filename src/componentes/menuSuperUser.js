@@ -27,22 +27,8 @@ class BarraLateral extends Component {
   constructor(){
     super()
     this.SeleccionArea =this.SeleccionArea.bind(this);
-    this.handleSubmit=this.handleSubmit.bind(this);
-    this.handleSubmitMantenimiento=this.handleSubmitMantenimiento.bind(this);
-
-
     this.ImagenChange=this.ImagenChange.bind(this);
-    this.subirMantenimiento=this.subirMantenimiento.bind(this);
 
-
-    var self = this;
-    axios.post(`http://localhost:4000/AreasDisponibles`,{})
-      .then(res => {
-        console.log("lado del cleinte :: "+res.data);
-        self.setState({
-          AreasDisponibles: res.data.Areas,
-        });
-      })
 
     }
   state = {
@@ -50,13 +36,13 @@ class BarraLateral extends Component {
     auth: true,
     anchorEl: null,
     visible: false,
-    NombreM:"",
-    AreaM:"",
-    MarcaM:"",
-    AnoM:"",
-    CorrienteM:"",
+    NombreA:"",
+    AreaA:"",
+    ProfesionA:"",
+    EdadA:"",
+    CorreoA:"",
     contador:0, //se tomara la cantidad de componentes que ya tiene una maquina
-    ArrayComponentes: [],
+    PassA: "",
     ImganeURl:"",
     file:null,
     AreasDisponibles : [],
@@ -94,8 +80,6 @@ class BarraLateral extends Component {
     this.showModal();
       break;
     case "2":
-    this.setState({ visible3: true });
-
       break;
     case "3":
 
@@ -109,65 +93,54 @@ class BarraLateral extends Component {
 handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) limpia los campos
    console.log(e);
    this.setState({
-     NombreM:"",
-     AreaM:"",
-     MarcaM:"",
-     AnoM:"",
-     CorrienteM:"",
-     NombreComponente:"",
+     NombreA:"",
+     AreaA:"",
+     ProfesionA:"",
+     EdadA:"",
+     CorreoA:"",
+     PassA:"",
      visible: false,
-     ArrayComponentes: [],
 
    });
  }
- handleCancelModal2 = (e) => { //cierra el segundo modal (datos de componentes)
-    console.log(e);             // en este caso no se limpian los campos porque se guardan de diferente forma
-    this.setState({
-      visible2:false,
-    });
-  }
-  handleCancelModal3 = (e) => { //cierra el segundo modal (datos de componentes)
-     console.log(e);             // en este caso no se limpian los campos porque se guardan de diferente forma
-     this.setState({
-       visible3:false,
-     });
-   }
+
 
   showModal = () => {
     this.setState({
       visible: true,
     });
   }
-  showModalReporte = () => {
-    this.setState({
-      visible3: true,
-    });
-  }
+
 
 //***** Cambios de estados de los campos de datos de las maquinas
-  NombreM =(event) =>{
+  NombreA =(event) =>{
     this.setState({
-      NombreM:event.target.value
+      NombreA:event.target.value
     })
   }
-  AreaM =(event) =>{
+  AreaA =(event) =>{
     this.setState({
-      AreaM:event.target.value
+      AreaA:event.target.value
     })
   }
-  MarcaM =(event) =>{
+  ProfesionA =(event) =>{
     this.setState({
-      MarcaM:event.target.value
+      ProfesionA:event.target.value
     })
   }
-  AnoM =(event) =>{
+  EdadA =(event) =>{
     this.setState({
-      AnoM:event.target.value
+      EdadA:event.target.value
     })
   }
-  CorrienteM =(event) =>{
+  CorreoA =(event) =>{
     this.setState({
-      CorrienteM:event.target.value
+      CorreoA:event.target.value
+    })
+  }
+  PassA =(event) =>{
+    this.setState({
+      PassA:event.target.value
     })
   }
 //**** Fin de los campos de cada maquinas
@@ -193,7 +166,6 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
        };
        reader.readAsDataURL(file);
 
-
     }
 
     subirImagen=()=>{
@@ -213,7 +185,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     //Metodo sera eliminado para emplazarlo con un server
    subirDatos=()=>{
      var self = this;
-     axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
+     axios.post(`http://localhost:4000/Subir_Agente`,{NombreA:this.state.NombreA,AreaA:this.state.AreaM,MarcaA:this.state.MarcaM,ProfesionA:this.state.ProfesionA,EdadA:this.state.EdadA,CorreoA:this.state.CorreoA, PassA: this.state.PassA})
        .then(res => {
          console.log("lado del cleinte :: "+res.data);
          self.setState({
@@ -221,16 +193,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
          });
        })
    }
-   subirMantenimiento=(e)=>{
-     var self = this;
-     axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
-       .then(res => {
-         console.log("lado del cleinte :: "+res.data);
-         self.setState({
-           visible: false,
-         });
-       })
-   }
+
 
 
    handleClickMenu = (e) => {
@@ -240,7 +203,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
      window.location.href = "/admin/";
        break;
      case "2":
-     window.location.href = "/admin/maquinas";
+     window.location.href = "/admin/Agentes";
 
        break;
      case "3":
@@ -252,45 +215,9 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
 
     }
 
-   //se toma el nombre de el componente seleccionado para que no pueda ser modificado
-   AgregarComponente=component=>{
-
-     this.setState({
-       visible2: true,
-       NombreComponente:component,
-     });
-   }
-
-//guardamos cada componente para cargarlo en la lista
-   handleSubmit = (e) => {
-     e.preventDefault()
-     var ArrayAux = [];
-    this.state.ArrayComponentes.push({Tipo:this.state.NombreComponente,Modelo_Componente:this.modeloC.value,FechaI_Componente:this.fechaC.value,Estado_Componente:this.NuevaC.value,Corriente_Componente:this.CorrienteC.value});
-
-     this.modeloC.value = "";
-     this.fechaC.value ="";
-     this.NuevaC.value = "";
-     this.CorrienteC.value = "";
-     this.setState({
-       visible2: false,
-       NombreComponente:"",
-     });
-
-
-   }
-
-   handleSubmitMantenimiento =(e)=>{
-     var self = this;
-     axios.post(`http://localhost:4000/Subir_Mantenimiento`,{TipoMan:this.TipoMan.value,Costo:this.Costo.value,Encargado:this.Encargado.value,Tiempo:this.Tiempo.value,Remplazo:this.Remplazo.value,Nueva:this.Nueva.value,Area:this.AreaMtm.value,Maquina:this.MaquinaMtm.value})
-       .then(res => {
-         self.setState({
-           visible3: false,
-         });
-       })
 
 
 
-   }
 
 
   render() {
@@ -300,8 +227,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
 
     const menu = (
       <Menu onClick={this.handleMenuClick}>
-        <Menu.Item key="1">Maquina</Menu.Item>
-        <Menu.Item key="2">Mantenimiento</Menu.Item>
+        <Menu.Item key="1">Agente</Menu.Item>
 
       </Menu>
     );
@@ -332,149 +258,33 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         </AppBar>
 
         <Modal
-                 title="Basic Modal"
+                 title="Nuevo Agente"
                  visible={this.state.visible}
                  onOk={this.validar}
                  onCancel={this.handleCancelModal}
                  width="900px"
                >
-               <h3>Datos de la maquina</h3>
+               <h3>Datos del Agente</h3>
                  <h4>Nombre</h4>
-                 <input  onChange={this.NombreM}></input>
-                 <h4>Area</h4>
-                 <input list="Areas" onChange={this.AreaM}/>
-                 <datalist id="Areas">
-                 {this.state.AreasDisponibles.map((it,key)=>{
-                   return(<option value={it}></option>)})}
+                  <input  onChange={this.NombreA}></input>
+                <h4>Area</h4>
+                  <input  onChange={this.AreaA}/>
 
-                 </datalist>
-                 <h4>Marca</h4>
-                 <input onChange={this.MarcaM}></input>
+                 <h4>Profesion</h4>
+                  <input onChange={this.ProfesionA}></input>
 
-                 <h4>Año de instalacion</h4>
-                 <input onChange={this.AnoM}></input>
+                 <h4>Edad</h4>
+                  <input onChange={this.EdadA}></input>
 
-                 <h4>Tipo corriente</h4>
-                 <input onChange={this.CorrienteM}></input>
-                 <h4>Subir Imagen</h4>
-                 <input type='file' onChange={this.ImagenChange.bind(this)}/>
+                 <h4>Correo</h4>
+                  <input onChange={this.CorreoA}></input>
+                 <h4>Contraseña</h4>
+                 <input onChange={this.PassA}></input>
 
-
-                 <div className="agregarComponentes">
-                  <Button className="botonplus" onClick={() => this.AgregarComponente("Motor_electrico")}>
-                    Motor <br/>Electrico <br/><Icon type="plus" />
-                  </Button>
-                  <Button className="botonplus" value onClick={() => this.AgregarComponente("Rodamiento")}>
-                    Rodamiento <br/><Icon type="plus" />
-                  </Button>
-                  <Button className="botonplus" onClick={() => this.AgregarComponente("Indicador_VF")}>
-                    Indicadores<br/> V/F<br/> <Icon type="plus" />
-                  </Button>
-                  <Button className="botonplus" onClick={() => this.AgregarComponente("Luces")}>
-                    Luces <br/><Icon type="plus" />
-                  </Button>
-
-                 </div>
                  <div>
                  </div>
 
-                 <div className='lista-Componentes'>
-                   <List horizontal style={{textAlign:'center'}}>
-                      {this.state.ArrayComponentes.map((it,key)=>{
-                        var desResumen=it.Tipo;
-                        return(<Carta datos={it} description={desResumen} key={key}/>)
-                      })}
-                  </List>
-                 </div>
-
        </Modal>
-       <Modal
-                title="Basic Modal"
-                visible={this.state.visible2}
-                onOk={this.handleSubmit}
-                onCancel={this.handleCancelModal2}
-                width="500px"
-                footer={[
-                    null, null,
-                ]}
-              >
-
-              <h3>Datos del componentes</h3>
-              <Form onSubmit={this.handleSubmit}>
-              <FormItem>
-
-              <h5>Nombre</h5>
-               <label>{this.state.NombreComponente}</label>
-               <h5>Modelo</h5>
-               <input  ref={(modeloC) => this.modeloC = modeloC} required/>
-               <h5>fecha de instalacion</h5>
-               <input  ref={(fechaC) => this.fechaC = fechaC} required/>
-               <h5>Pieza nueva o usada</h5>
-               <input  ref={(NuevaC) => this.NuevaC = NuevaC}  required/>
-               <h5>Tipo de corriente</h5>
-               <input  ref={(CorrienteC) => this.CorrienteC = CorrienteC}  required/>
-               </FormItem>
-               <FormItem>
-               <Button id="btnaceptar" htmlType="submit" bsSize="large" >Aceptar</Button>
-               </FormItem>
-
-               </Form>
-
-
-      </Modal>
-
-      <Modal
-               title="Nuevo Mantenimiento"
-               visible={this.state.visible3}
-               onOk={this.handleSubmitReporte}
-               onCancel={this.handleCancelModal3}
-               width="500px"
-               footer={[
-                   null, null,
-               ]}
-             >
-
-             <h3>Datos del mantenimeinto</h3>
-             <Form onSubmit={this.handleSubmitMantenimiento}>
-             <FormItem>
-
-             <h5>Selecciona Area</h5>
-             <input list="Areas" onChange={this.SeleccionArea} ref={(AreaMtm) => this.AreaMtm = AreaMtm}/>
-             <datalist id="Areas">
-             {this.state.AreasDisponibles.map((it,key)=>{
-               return(<option value={it}></option>)})}
-
-             </datalist>
-             <h5>Selecciona Maquina</h5>
-             <input list="Areas2" ref={(MaquinaMtm) => this.MaquinaMtm = MaquinaMtm} />
-             <datalist id="Areas2">
-             {this.state.MaquinasPorArea.map((it,key)=>{
-               return(<option value={it}></option>)})}
-
-             </datalist>
-
-              <h5>Tipo de mantenimiento</h5>
-              <input placeholder="correctivo/preventivo"  ref={(TipoMan) => this.TipoMan = TipoMan} required/>
-              <h5>Costo</h5>
-              <input  ref={(Costo) => this.Costo = Costo} required/>
-              <h5>Encargado</h5>
-              <input  ref={(Encargado) => this.Encargado = Encargado}  required/>
-              <h5>Tiempo</h5>
-              <input  ref={(Tiempo) => this.Tiempo = Tiempo}  required/>
-              <h5>Remplazo de componente?</h5>
-              <input  ref={(Remplazo) => this.Remplazo = Remplazo}  required/>
-              <h5>Estado de pieza remplazada</h5>
-              <input  placeholder="nueva/usada" ref={(Nueva) => this.Nueva = Nueva}  required/>
-              </FormItem>
-              <FormItem>
-              <Button id="btnaceptar" htmlType="submit" bsSize="large" >Aceptar</Button>
-              </FormItem>
-
-              </Form>
-
-
-     </Modal>
-
 
 
       <div style={{ width: 256,position:'absolute', zIndex:2 }}>
@@ -494,11 +304,11 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="desktop" />
-            <span>Areas</span>
+            <span>Agentes</span>
           </Menu.Item>
           <Menu.Item key="3">
             <Icon type="inbox" />
-            <span>Option 3</span>
+            <span>Mantenimientos</span>
           </Menu.Item>
         </Menu>
       </div>
@@ -507,30 +317,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
   }
 }
 
-class Carta extends Component{
-  render(){
-    return(
-      <List.Item>
-      <List.Header>{this.props.datos.Tipo}</List.Header>
 
-        <Card>
-        <CardActionArea>
-
-            <CardContent>
-              <Typography gutterBottom  component="h4">
-                 {this.props.datos.Modelo_Componente}
-              </Typography>
-              <Typography component="p">
-              {this.props.FechaI_Componente}
-              </Typography>
-            </CardContent>
-        </CardActionArea>
-      </Card>
-    </List.Item>
-
-    );
-  }
-}
 
 
 export default BarraLateral;
