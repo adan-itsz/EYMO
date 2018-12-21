@@ -127,7 +127,7 @@ handleCancelModalRemove(){
 
 
        if(this.props.location.Maquina && this.props.location.Componentes){
-    
+
          ML=JSON.parse(localStorage.getItem('Maquina'));
         CL=JSON.parse(localStorage.getItem('Componentes'));
          if (this.props.location.Maquina===ML && this.props.location.Componentes===CL) {
@@ -439,7 +439,8 @@ class CartaCompo extends Component{
     return(
     <div className='cardCompo'>
       <Grid.Column>
-          <Header as='h3' style={{textAlign:'center'}}>
+          <br/>
+          <Header as='h3' style={{textAlign:'center',paddingTop:'2vh'}}>
           {this.props.datos.Tipo}
           </Header>
           <Header as='h2' style={{textAlign:'center'}}>
@@ -447,7 +448,7 @@ class CartaCompo extends Component{
           </Header>
         Estado de la pieza :  {this.props.datos.EstadoPieza}<br/>
         id  :  {this.props.datos.key}
-      </Grid.Column>
+      </Grid.Column><br/>
       </div>
     );
   }

@@ -388,7 +388,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         </AppBar>
 
         <Modal
-                 title="Basic Modal"
+                 title="Nueva máquina"
                  visible={this.state.visible}
                  onOk={this.subirDatos}
                  onCancel={this.handleCancelModal}
@@ -396,36 +396,41 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
                >
                <h3>Datos de la maquina</h3>
                  <h4>Nombre</h4>
-                 <input  onChange={this.NombreM}></input>
-                 <h4>Area</h4>
-                 <input list="Areas" onChange={this.AreaM}/>
+                 <input style={{width:'35%'}}  onChange={this.NombreM}></input><br/>
+                 <br/><h4>Area</h4>
+                 <input  style={{width:'35%'}} list="Areas" onChange={this.AreaM}/>
                  <datalist id="Areas">
+                 Seleccionar
                  {this.state.AreasDisponibles.map((it,key)=>{
                    return(<option value={it}></option>)})}
-                 </datalist>
-                 <h4>Marca</h4>
-                 <input onChange={this.MarcaM}></input>
+                 </datalist><br/>
+                 <br/><h4>Marca</h4>
+                 <input  style={{width:'35%'}} onChange={this.MarcaM}></input><br/>
                  <h4>Año de instalacion</h4>
-                 <input type="month" onChange={this.AnoM}></input>
+                 <input  style={{width:'35%'}} type="month" onChange={this.AnoM}></input>
                  <div className="dropC">
-                 <h4>Tipo de corriente</h4>
-                 <Dropdown id="dropC" overlay={Corri}>
+                 <br/>
+                 <Dropdown  style={{width:'35%'}} id="dropC" overlay={Corri}>
                      <a className="ant-dropdown-link">
-                        {this.state.CorrienteM}<Icon type="down" />
+                        <strong>Tipo corriente</strong><Icon type="down" />
                      </a>
                   </Dropdown>
                   </div>
-                  <h4>Estado de la maquina</h4>
+                  <br/>
 
                   <Dropdown id="dropC" overlay={EstadoM}>
                       <a className="ant-dropdown-link">
-                         {this.state.EstadoActual}<Icon type="down" />
+                         <strong>estado de la máquina</strong><Icon type="down" />
                       </a>
-                   </Dropdown>                 <h4>Subir Imagen</h4>
+                   </Dropdown><br/><br/>
+                 <h4>Subir Imagen</h4>
                  <input type='file' onChange={this.ImagenChange.bind(this)}/>
 
 
                  <div className="agregarComponentes">
+                 <Button className="botonplus" onClick={() => this.AgregarComponente("Motor_electrico")}>
+                   Motor <br/>Electrico <br/><Icon type="plus" />
+                 </Button>
                   <Button className="botonplus" onClick={() => this.AgregarComponente("Motor_electrico")}>
                     Motor <br/>Electrico <br/><Icon type="plus" />
                   </Button>
@@ -465,19 +470,18 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
               >
 
               <h3>Datos del componentes</h3>
-              <Form onSubmit={this.handleSubmit}>
+              <Form  style={{width:'80%'}}onSubmit={this.handleSubmit}>
               <FormItem>
 
-              <h5>Nombre</h5>
-               <label>{this.state.NombreComponente}</label>
-               <h5>Modelo</h5>
-               <input  ref={(modeloC) => this.modeloC = modeloC} required/>
-               <h5>fecha de instalacion</h5>
-               <input  ref={(fechaC) => this.fechaC = fechaC} required/>
-               <h5>Pieza nueva o usada</h5>
-               <input  ref={(NuevaC) => this.NuevaC = NuevaC}  required/>
-               <h5>Tipo de corriente</h5>
-               <input  ref={(CorrienteC) => this.CorrienteC = CorrienteC}  required/>
+              <h5>Nombre: {this.state.NombreComponente}</h5>
+               <br/><h5>Modelo</h5>
+               <input  style={{width:'100%'}} ref={(modeloC) => this.modeloC = modeloC} required/>
+               <br/><h5>fecha de instalacion</h5>
+               <input style={{width:'100%'}} ref={(fechaC) => this.fechaC = fechaC} required/>
+               <br/><h5>Pieza nueva o usada</h5>
+               <input  style={{width:'100%'}}ref={(NuevaC) => this.NuevaC = NuevaC}  required/>
+               <br/><h5>Tipo de corriente</h5>
+               <input  style={{width:'100%'}} ref={(CorrienteC) => this.CorrienteC = CorrienteC}  required/>
                </FormItem>
                <FormItem>
                <Button id="btnaceptar" htmlType="submit" bsSize="large" >Aceptar</Button>

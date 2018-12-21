@@ -72,13 +72,15 @@ class Buscar extends Component {
       resultados:[],
       ArrayMAquinas: [],
       idArea:`${match.match.params.id}`,
-      TodosComponentes:[]
+      TodosComponentes:[],
+      resultadosInterface:[]
     }
     axios.post(`http://localhost:4000/ConsultaMaquina`,{Area:`${match.match.params.id}`})
       .then(res => {
         console.log("lado del cleinte :: "+res.data);
         this.setState({
           resultados:res.data.Maquinas,
+          resultadosInterface:res.data.Maquinas,
           TodosComponentes: res.data.Componentes
         })
       })
@@ -89,17 +91,17 @@ class Buscar extends Component {
     var res=[];
     var longitud=this.state.query.length;
     if(longitud==0){
-      res=maquinariaLista.datos
+      res=this.state.resultados
     }
     else{
-    maquinariaLista.datos.forEach(it=>{
-      if(it.head.substring(0,longitud)==this.state.query){
+    this.state.resultados.forEach(it=>{
+      if(it.Nombre.substring(0,longitud)==this.state.query){
         res=res.concat(it);
       }
     })
   }
     this.setState({
-      resultados:res
+      resultadosInterface:res
     })
   }
 
@@ -115,7 +117,7 @@ class Buscar extends Component {
   }
 
   render() {
-    var list=this.state.resultados.length>0;
+    var list=this.state.resultadosInterface.length>0;
     var ArraComp = this.state.TodosComponentes
     return (
       <div className='contenedor-busqueda'>
@@ -129,7 +131,7 @@ class Buscar extends Component {
           list==true ?
           <div className='lista-maquinas'>
             <List style={{textAlign:'center'}}relaxed='very'>
-               {this.state.resultados.map((it,key)=>{
+               {this.state.resultadosInterface.map((it,key)=>{
                  return(<Carta datos={it} Componente={ArraComp[key]}  key={key}/>)
                })}
            </List>
