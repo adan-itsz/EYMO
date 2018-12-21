@@ -309,7 +309,7 @@ var self=this;
     <List>
       <List.Item>
       <div className='itemDescripcion'>
-        <img className='imagen-item' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTisjG7YVQiVLtLH4paHwwm-n14Ync6Tq7i0mB0GUHYAOUctWro' />
+        <img className='imagen-item' src= {this.state.Maquina.Imagen} />
         <List>
         <List.Item>
           <div className='title'>

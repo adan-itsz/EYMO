@@ -20,6 +20,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import {TextField,MuiThemeProvider}from 'material-ui/TextField';
 import axios from 'axios';
+import FormData from 'form-data';
 
 const SubMenu = Menu.SubMenu;
 
@@ -27,6 +28,8 @@ class BarraLateral extends Component {
   constructor(){
     super()
     this.SeleccionArea =this.SeleccionArea.bind(this);
+    this.subirDatos =this.subirDatos.bind(this);
+    this.subirImagen =this.subirImagen.bind(this);
     this.handleSubmit=this.handleSubmit.bind(this);
     this.handleSubmitMantenimiento=this.handleSubmitMantenimiento.bind(this);
 
@@ -219,25 +222,44 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     }
 
     subirImagen=()=>{
-    /* var nombre2 = this.state.file.name;
-      axios.post(`http://localhost:4000/Subir_ImagenMaquina`,{ nombre:nombre2})
-      .then(res => {
-           console.log(res.data);
-           this.setState({
-             ImganeURl: res.data,
-           });
-           this.subirDatos();
 
-         })
-        */
+      let archivo = this.state.file;
+      var user = firebase.auth().currentUser;
+      const ref = firebase.storage().ref(`Maquinas/${archivo.name}`)
+      const task = ref.put(archivo);
+      var self = this;
+      var downloadURL;
+      var promise = new Promise(
+        function(resolve,reject){
+
+            task.on('state_changed',function(snapshot){
+
+            },(error) =>{
+              alert(error);
+            },()=>{
+              task.snapshot.ref.getDownloadURL().then(function(dURL) {
+                resolve(downloadURL= dURL);
+              });
+
+
+            })
+        })
+
+
+      promise.then(
+        function(url){
+
+      self.subirDatos(downloadURL);
+        }
+      )
 
     }
     //Metodo sera eliminado para emplazarlo con un server
-   subirDatos=()=>{
+   subirDatos=(url)=>{
      var self = this;
      if(this.state.ArrayComponentes.length){
      if(this.state.NombreM.length !=0 && this.state.AreaM.length){
-       axios.post(`http://localhost:4000/Subir_MaquinaNueva`,{NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes, imagen: this.state.ImganeURl})
+       axios.post(`http://localhost:4000/Subir_MaquinaNueva`, {NombreM:this.state.NombreM,AreaM:this.state.AreaM,MarcaM:this.state.MarcaM,AnoInstalacionM:this.state.AnoM,CorrienteM:this.state.CorrienteM,ArrayComponentes:this.state.ArrayComponentes,Imagen:url})
          .then(res => {
            console.log("lado del cleinte :: "+res.data);
            self.setState({
@@ -390,7 +412,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         <Modal
                  title="Nueva máquina"
                  visible={this.state.visible}
-                 onOk={this.subirDatos}
+                 onOk={this.subirImagen}
                  onCancel={this.handleCancelModal}
                  width="900px"
                >
@@ -559,15 +581,11 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         >
           <Menu.Item key="1">
             <Icon type="pie-chart" />
-            <span>Menu Principal</span>
+            <span>Areas</span>
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="desktop" />
-            <span>Areas</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Icon type="inbox" />
-            <span>Option 3</span>
+            <span>Mantenimientos</span>
           </Menu.Item>
         </Menu>
       </div>

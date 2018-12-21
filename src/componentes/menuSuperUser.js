@@ -185,10 +185,16 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     //Metodo sera eliminado para emplazarlo con un server
    subirDatos=()=>{
      var self = this;
-     axios.post(`http://localhost:4000/Subir_Agente`,{NombreA:this.state.NombreA,AreaA:this.state.AreaM,MarcaA:this.state.MarcaM,ProfesionA:this.state.ProfesionA,EdadA:this.state.EdadA,CorreoA:this.state.CorreoA, PassA: this.state.PassA})
+     axios.post(`http://localhost:4000/Subir_Agente`,{NombreA:this.state.NombreA,AreaA:this.state.AreaA,ProfesionA:this.state.ProfesionA,EdadA:this.state.EdadA,CorreoA:this.state.CorreoA, PassA: this.state.PassA})
        .then(res => {
-         console.log("lado del cleinte :: "+res.data);
+         console.log(res.data);
          self.setState({
+           NombreA:"",
+           AreaA:"",
+           ProfesionA:"",
+           EdadA:"",
+           CorreoA:"",
+           PassA:"",
            visible: false,
          });
        })
@@ -300,7 +306,7 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
         >
           <Menu.Item key="1">
             <Icon type="pie-chart" />
-            <span>Menu Principal</span>
+            <span>Analitics</span>
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="desktop" />
