@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { Icon,List, Input } from 'semantic-ui-react';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import { Divider, Header,Table,Modal,Button,Form,Card,Image,Label} from 'semantic-ui-react';
+import '../estilo/Busqueda.css';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {Route,Link} from 'react-router-dom';
 import axios from 'axios';
+import BarraLateral from './sideBar.js';
 
 const styles = {
   card: {
@@ -120,6 +118,8 @@ class Buscar extends Component {
     var list=this.state.resultadosInterface.length>0;
     var ArraComp = this.state.TodosComponentes
     return (
+      <div>
+      <BarraLateral/>
       <div className='contenedor-busqueda'>
         <div className='busqueda'>
           <Input  fluid icon={<Icon name='search' inverted circular link />}
@@ -129,12 +129,14 @@ class Buscar extends Component {
 
         {
           list==true ?
-          <div className='lista-maquinas'>
-            <List style={{textAlign:'center'}}relaxed='very'>
+          <div id="bodyRutas">
+          <div id="RutasPublicas">
+
                {this.state.resultadosInterface.map((it,key)=>{
                  return(<Carta datos={it} Componente={ArraComp[key]}  key={key}/>)
                })}
-           </List>
+
+           </div>
           </div>
         :<div >
           <img className='not-found' src='http://www.cgcollege.org/Assets/images/icons/nodata-found.png'/>
@@ -142,45 +144,50 @@ class Buscar extends Component {
        }
 
       </div>
+      </div>
     );
   }
 }
 
+
+
 class Carta extends Component{
+
+  constructor(){
+    super();
+
+
+  }
+
   render(){
     const newTo = {
       pathname: `/user/MaqItem/`+this.props.key,
       Maquina: this.props.datos,
       Componentes: this.props.Componente
         };
+
     return(
-      <List.Item>
-        <Card style={{maxWidth: 545,margin:0}}>
-        <CardActionArea>
-        <Link id='agregarLibro' to={newTo}>
-            <CardMedia
-              style={{height: 240}}
-              image={this.props.datos.Imagen}
-              title={this.props.datos.Marca}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="headline" component="h2">
-                 {this.props.datos.Nombre}
-              </Typography>
-              <Typography component="p">
-               Area : {this.props.datos.Area} &nbsp;&nbsp;&nbsp;  Año de instalacion : {this.props.datos.AnoInstalacion} &nbsp;&nbsp;&nbsp;  Corriente : {this.props.datos.Corriente}
 
-              </Typography>
-            </CardContent>
-          </Link>
-        </CardActionArea>
-      </Card>
-    </List.Item>
+      <div id="borderCarta">
 
-    );
+      <Link id='agregarLibro' to={newTo}>
+        <Card id = 'CardSolo' color='grey' fluid >
+          <Card.Content>
+          <Label  attached='top right'>X</Label>
+           <Image floated='right'style={{marginRight:"10%"}} size='small' src= {this.props.datos.Imagen} />
+            <Card.Header >{this.props.datos.Nombre}</Card.Header>
+            <Card.Meta>{this.props.datos.Area}</Card.Meta>
+            <Card.Description></Card.Description>
+            <Card.Description>año de instalacion : {this.props.datos.AnoInstalacion}</Card.Description>
+          </Card.Content>
+
+
+    </Card>
+    </Link>
+      </div>
+    )
   }
 }
-
 
 
 export default Buscar;

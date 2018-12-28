@@ -1,0 +1,49 @@
+#inputFiltros{
+  width: 60%;
+  margin-top: 15px;
+  left: 22%;
+}
+#inputFiltros *{
+  margin-right: 8%;
+  width: 40%;
+}
+#bodyRutas{
+  height:400px;
+  width: 100%;
+  overflow:hidden;
+  overflow-y: hidden;
+
+}
+
+#RutasPublicas{
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-column-gap: 4rem;
+  grid-row-gap: 2rem;
+  overflow: auto;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+#RutasPublicas::-webkit-scrollbar {
+  /* This is the magic bit for WebKit */
+  display: none;
+}
+
+
+#borderCarta{
+  margin-left: 40px;
+  margin-top: 20px;
+
+}
+#CardSolo{
+  width: 300px;
+  height: 300px;
+}
+
+#div-stepper-envios{
+width:70%;
+margin-left: 40%;
+margin-top: 5%;
+transform: scale(.7);
+}

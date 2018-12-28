@@ -38,18 +38,22 @@ margin: -30% 0 0 5%;
   display: inline-block;
   -webkit-transform: translate(90%,8%);
 }
+#CardSoloItem{
+  width: 50%;
+  margin-left: 25%;
+}
 .acordeon{
   padding: 5vh;
 }
 .contenedorGrid{
   padding: 8vh;
     width: 100%;
-  background-color: #F1F0F0;
+
 }
 .cardCompo{
   background-color: #D8D8D8;
   width: 20%;
-  height: 90px;
+  height: 100%;
   margin-left: 20px;
   margin-right: 10px;
   margin-bottom: 10px;

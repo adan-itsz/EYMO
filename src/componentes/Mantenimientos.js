@@ -9,7 +9,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import BarraLateral from './sideBar.js';
 import axios from 'axios';
 
 
@@ -91,6 +91,8 @@ class Carta extends Component{
     return(
 
       <div>
+
+      <BarraLateral/>
 
         <Card style={{borderRadius:'2vh', width:'95%', minWidth:'250px', margin:' 1em 2.5em'}}>
           <Card.Content>

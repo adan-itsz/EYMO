@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,Icon,Grid,Container,Header,Divider,List,Select,Accordion } from 'semantic-ui-react'
+import { Image,Icon,Grid,Container,Header,Divider,List,Select,Accordion,Card } from 'semantic-ui-react'
 import { Menu, Button,Form, Radio,Dropdown, Modal,FormItem } from 'antd';
 import 'antd/dist/antd.css';
 import '../estilo/item-maquina.css';
@@ -11,11 +11,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+
 import axios from 'axios';
 
 
@@ -150,6 +146,7 @@ handleCancelModalRemove(){
               localStorage.setItem('Maquina',JSON.stringify(this.props.location.Maquina));
               localStorage.setItem('Componentes',JSON.stringify(this.props.location.Componentes));
             }
+              this.Actualizar(this.props.location.Maquina,this.props.location.Componentes);
          }
        }
        else{
@@ -159,14 +156,12 @@ handleCancelModalRemove(){
            Maquina: ML,
            Componentes:CL,
          });
+         if (ML && CL) {
+           this.Actualizar(ML,CL);
+         }
        }
-       if (ML && CL) {
-         this.Actualizar(ML,CL);
-       }
-       else {
-         this.Actualizar(this.props.location.Maquina,this.props.location.Componentes);
 
-       }
+
 
 
 
@@ -307,33 +302,17 @@ var self=this;
 
       </Modal>
     <List>
-      <List.Item>
-      <div className='itemDescripcion'>
-        <img className='imagen-item' src= {this.state.Maquina.Imagen} />
-        <List>
-        <List.Item>
-          <div className='title'>
-            <Header as='h2' icon  style={{float:'right'}}>
-              <Icon name='settings' />
-              {this.state.Maquina.Nombre}
-              <Header.Subheader>Area {this.state.Maquina.Area}</Header.Subheader>
-            </Header>
-          </div>
-        </List.Item>
-        <List.Item>
-          <Divider  />
-        </List.Item>
-        <List.Item>
-          <div className='description'>
-            <p>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
-               eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </p>
-          </div>
-        </List.Item>
-      </List>
-      </div>
-    </List.Item>
+    <Card id ='CardSoloItem' color='grey' fluid >
+      <Card.Content>
+       <Image floated='left'style={{marginRight:"10%"}} size='medium' src= {this.state.Maquina.Imagen} />
+        <Card.Header >{this.state.Maquina.Nombre}</Card.Header>
+        <Card.Meta>{this.state.Maquina.Marca} </Card.Meta>
+        <Card.Description>Area: {this.state.Maquina.Area}</Card.Description>
+        <Card.Description>año de instalacion : {this.state.Maquina.AnoInstalacion}</Card.Description>
+      </Card.Content>
+    </Card>
+
+
       <Divider style={{width:'75%',margin:'auto',paddingTop:'0'}} />
     <List.Item>
     <div className='historial-header'>
