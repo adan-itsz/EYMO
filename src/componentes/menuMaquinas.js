@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Grid, Card, Icon,  Image,Header } from 'semantic-ui-react';
+import { Grid, Card, Icon,Divider, Image,Header } from 'semantic-ui-react';
 import {Route,Link} from 'react-router-dom';
 import '../estilo/maquinas.css'
+import BarraLateral from './sideBar.js'
 class Maquinas extends Component {
   constructor(){
     super()
@@ -45,8 +46,16 @@ class Maquinas extends Component {
 
   render() {
     return (
-      <div className="contenedorGrid">
+      <div>
+      <BarraLateral/>
 
+      <div className="contenedorGrid">
+      <Divider horizontal style={{paddingTop:'4vh'}}>
+        <Header as='h3'>
+            <i class="material-icons" style={{ fontSize: '2em' }}>storage</i>
+             Areas
+        </Header>
+      </Divider>
       <Grid container columns={3}>
       <Grid.Row verticalAlign='top'>
          <Grid.Column onClick={this.seleccion('uno')} >
@@ -119,21 +128,10 @@ class Maquinas extends Component {
 
         </Grid.Row>
 
-        <Grid.Row verticalAlign='top'>
-          <Grid.Column onClick={this.seleccion('siete')}>
-           <div className='card'>
-           <div className="imagen">
-             <Image src='https://firebasestorage.googleapis.com/v0/b/eymo-91ecd.appspot.com/o/Ing_tala%2FAreas%2F08.png?alt=media&token=6922a337-6141-434d-8563-89e5f10f61a5.png'/>
-           </div>
-            <Header as='h3' style={{textAlign:'center'}}>
-             <Header.Content>Area 7</Header.Content>
-            </Header>
-          </div>
-          </Grid.Column>
 
-        </Grid.Row>
       </Grid>
 
+      </div>
       </div>
 
     );

@@ -3,7 +3,7 @@ import {Route, BrowserRouter, Switch,Router} from 'react-router-dom'
 import Maquinas from '../componentes/menuMaquinas.js'
 import Buscar from '../componentes/busqueda.js';
 import ItemMaquina from '../componentes/item-maquina.js';
-import BarraLateral from '../componentes/menu.js';
+import BarraLateral from '../componentes/sideBar.js';
 import MantenimientoItem from '../componentes/Mantenimientos.js';
 class RouterPrincipal extends Component {
   constructor(){
@@ -13,8 +13,8 @@ class RouterPrincipal extends Component {
   render() {
     return (
       <div className='contenedor-opciones'>
-      <BarraLateral/>
 
+      <BarraLateral/>
       <BrowserRouter>
         <Switch >
         <Route exact path="/user/" component={Maquinas}/>

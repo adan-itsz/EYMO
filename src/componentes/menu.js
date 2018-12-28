@@ -21,6 +21,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import {TextField,MuiThemeProvider}from 'material-ui/TextField';
 import axios from 'axios';
 import FormData from 'form-data';
+import navbar from './sideBar.js';
+import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
 
 const SubMenu = Menu.SubMenu;
 
@@ -297,25 +299,6 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
    }
 
 
-   handleClickMenu = (e) => {
-   console.log('click ', e);
-   switch (e.key) {
-     case "1":
-     window.location.href = "/user/";
-       break;
-     case "2":
-     window.location.href = "/user/Mantenimientos";
-
-       break;
-     case "3":
-
-       break;
-     default:
-
-   }
-
-    }
-
    //se toma el nombre de el componente seleccionado para que no pueda ser modificado
    AgregarComponente=component=>{
 
@@ -353,9 +336,6 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
            visible3: false,
          });
        })
-
-
-
    }
 
 
@@ -385,6 +365,68 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
     );
     return (
       <div className="AppBarMenu">
+      <div>
+
+        <SideNav>
+          <SideNav.Toggle />
+          <SideNav.Nav defaultSelected="Home">
+
+          <NavItem>
+          <Link to="/user/">
+            <NavItem >
+              <NavIcon>
+                <i class="material-icons" style={{ fontSize: '2em' }}>home</i>
+              </NavIcon>
+              <NavText>
+                Home
+              </NavText>
+            </NavItem>
+          </Link>
+          </NavItem>
+
+          <NavItem>
+          <Link to="/user/Perfil">
+            <NavItem >
+              <NavIcon>
+                <i class="material-icons" style={{ fontSize: '2em' }}>person</i>
+              </NavIcon>
+              <NavText>
+                Perfil
+              </NavText>
+            </NavItem>
+          </Link>
+          </NavItem>
+
+
+          <NavItem>
+          <Link to="/user/Mantenimientos">
+            <NavItem>
+              <NavIcon>
+                <i class="material-icons" style={{ fontSize: '2em' }}>directions_boat </i>
+              </NavIcon>
+              <NavText style={{fontSize:'1em'}}>
+                Envios
+              </NavText>
+            </NavItem>
+          </Link>
+          </NavItem>
+
+
+            <NavItem onClick={() => this.handleItemClick(firebase.auth().signOut() )}>
+              <NavIcon>
+                <i class="material-icons" style={{ fontSize: '2em' }}>exit_to_app </i>
+              </NavIcon>
+              <NavText style={{fontSize:'1em'}}>
+                Salir
+              </NavText>
+            </NavItem>
+
+
+
+          </SideNav.Nav>
+          </SideNav>
+
+      </div>
       <AppBar position="static" style={{backgroundColor:'white',position:'relative',zIndex:1}}>
           <Toolbar>
             <Typography variant="title" color="inherit" style={{ flexGrow: 1,}}>
@@ -432,15 +474,18 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
                  <input  style={{width:'35%'}} type="month" onChange={this.AnoM}></input>
                  <div className="dropC">
                  <br/>
-                 <Dropdown  style={{width:'35%'}} id="dropC" overlay={Corri}>
+                 <Dropdown  style={{width:'35%'}} id="dropC"  overlay={Corri}>
                      <a className="ant-dropdown-link">
-                        <strong>Tipo corriente</strong><Icon type="down" />
+                        <strong>Tipo corriente</strong>
+
                      </a>
                   </Dropdown>
-                  </div>
-                  <br/>
 
-                  <Dropdown id="dropC" overlay={EstadoM}>
+                  </div>
+
+                  <br/>
+<strong>Año de instalacion</strong>
+                  <Dropdown id="dropC" value={this.EstadoM} overlay={EstadoM}>
                       <a className="ant-dropdown-link">
                          <strong>estado de la máquina</strong><Icon type="down" />
                       </a>
@@ -566,29 +611,6 @@ handleCancelModal = (e) => {   //Cuando cierra el primer modal (datos mquina) li
 
      </Modal>
 
-
-
-      <div style={{ width: 256,position:'absolute', zIndex:2 }}>
-
-        <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          onClick={this.handleClickMenu}
-          mode="inline"
-          theme='light'
-          inlineCollapsed={this.state.collapsed}
-          style={{height:'50%'}}
-        >
-          <Menu.Item key="1">
-            <Icon type="pie-chart" />
-            <span>Areas</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Icon type="desktop" />
-            <span>Mantenimientos</span>
-          </Menu.Item>
-        </Menu>
-      </div>
     </div>
     );
   }
