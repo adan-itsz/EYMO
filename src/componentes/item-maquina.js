@@ -11,6 +11,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 import axios from 'axios';
 
@@ -336,59 +338,113 @@ var self=this;
         <div className='contenido-card'>
         </div>
       }
-      <List.Item>
         <div className="contenedorGrid">
-          <Grid>
+
+          <List.Item>
+
           <Header id="HeaderComponentes" as='h5' icon='globe' content='Variables Fisicas'/>
           <div className="botonesAdd">
           <Icon onClick={() => this.Add("Indicador_VF")} name='add' size='big' />
           <Icon onClick={() => this.Eliminar("Indicador_VF")} name='delete' size='big' />
           </div>
-            <Grid.Row verticalAlign='top'>
-              {this.state.VariablesF.map((it,key)=>{
-                return(<CartaCompo datos={it}  key={key}/>)
-              })}
-            </Grid.Row>
+
+          </List.Item>
+
+          <List.Item>
+
+              <CarouselProvider
+              id="Carousel"
+              naturalSlideWidth={140}
+              naturalSlideHeight={50}
+              totalSlides={this.state.VariablesF.length} >
+                <Slider>
+                  {this.state.VariablesF.map((it,key)=>{
+                      return(<CartaCompo datos={it}  img={'/imgs/Indicador.png'}  key={key}/>)
+                  })}
+                </Slider>
+                <div id="ButtonCarousel">
+                <ButtonBack id="ButtonBack">Back</ButtonBack>
+                <ButtonNext id="ButtonNext">Next</ButtonNext>
+                </div>
+              </CarouselProvider>
+          </List.Item>
+          <List.Item>
             <div className="divid"></div>
             <Header id="HeaderComponentes" as='h5' icon='cogs' content='Rodamientos'/>
             <div className="botonesAdd">
             <Icon onClick={() => this.Add("Rodamiento")} name='add' size='big' />
             <Icon onClick={() => this.Eliminar("Rodamiento")} name='delete' size='big' />
             </div>
-            <Grid.Row verticalAlign='top'>
+          </List.Item>
+          <List.Item>
+          <CarouselProvider
+          id="Carousel"
+          naturalSlideWidth={140}
+          naturalSlideHeight={50}
+          totalSlides={this.state.Rodamientos.length} >
+            <Slider>
               {this.state.Rodamientos.map((it,key)=>{
-                return(<CartaCompo datos={it}  key={key}/>)
+                  return(<CartaCompo datos={it}  img={'/imgs/Rodamiento.png'}  key={key}/>)
               })}
-            </Grid.Row>
+            </Slider>
+            <div id="ButtonCarousel">
+            <ButtonBack id="ButtonBack">Back</ButtonBack>
+            <ButtonNext id="ButtonNext">Next</ButtonNext>
+            </div>
+          </CarouselProvider>
+          </List.Item>
+          <List.Item>
             <div className="divid"></div>
             <Header id="HeaderComponentes" as='h5' icon='idea' content='Luces'/>
             <div className="botonesAdd">
             <Icon onClick={() => this.Add("Luces")} name='add' size='big' />
             <Icon onClick={() => this.Eliminar("Luces")} name='delete' size='big' />
             </div>
-            <Grid.Row verticalAlign='top'>
-              {this.state.Luces.map((it,key)=>{
-                return(<CartaCompo datos={it}  key={key}/>)
-              })}
-            </Grid.Row>
+            </List.Item>
+            <List.Item>
+            <CarouselProvider
+            id="Carousel"
+            naturalSlideWidth={140}
+            naturalSlideHeight={50}
+            totalSlides={this.state.Luces.length} >
+              <Slider>
+                {this.state.Luces.map((it,key)=>{
+                    return(<CartaCompo datos={it} img={'/imgs/Foco.png'}  key={key}/>)
+                })}
+              </Slider>
+              <div id="ButtonCarousel">
+              <ButtonBack id="ButtonBack">Back</ButtonBack>
+              <ButtonNext id="ButtonNext">Next</ButtonNext>
+              </div>
+            </CarouselProvider>
+            </List.Item>
+            <List.Item>
             <div className="divid"></div>
             <Header id="HeaderComponentes" as='h5' icon='microchip' content='Motores Electricos'/>
             <div className="botonesAdd">
             <Icon onClick={() => this.Add("Motor_electrico")} name='add' size='big' />
             <Icon onClick={() => this.Eliminar("Motor_electrico")} name='delete' size='big' />
             </div>
-            <Grid.Row verticalAlign='top'>
-              {this.state.MotoresE.map((it,key)=>{
-                return(<CartaCompo datos={it}  key={key}/>)
-              })}
-            </Grid.Row>
-            <div className="divid"></div>
-          </Grid>
+              <CarouselProvider
+              id="Carousel"
+              naturalSlideWidth={140}
+              naturalSlideHeight={50}
+              totalSlides={this.state.MotoresE.length} >
+               <Slider>
+                {this.state.MotoresE.map((it,key)=>{
+                  return(<CartaCompo datos={it} img={'/imgs/motor.png'}  key={key}/>)
+                })}
+                </Slider>
+                <div id="ButtonCarousel">
+                <ButtonBack id="ButtonBack">Back</ButtonBack>
+                <ButtonNext id="ButtonNext">Next</ButtonNext>
+                </div>
+                </CarouselProvider>
+            </List.Item>
         </div>
-      </List.Item>
-
 
     </List>
+
       </div>
 
     );
@@ -416,19 +472,26 @@ class CartaCompo extends Component{
 
 
     return(
-    <div className='cardCompo'>
-      <Grid.Column>
-          <br/>
-          <Header as='h3' style={{textAlign:'center',paddingTop:'2vh'}}>
-          {this.props.datos.Tipo}
-          </Header>
-          <Header as='h2' style={{textAlign:'center'}}>
-          <Header.Content>{this.props.datos.Modelo}</Header.Content>
-          </Header>
-        Estado de la pieza :  {this.props.datos.EstadoPieza}<br/>
-        id  :  {this.props.datos.key}
-      </Grid.Column><br/>
-      </div>
+
+      <Slide >
+
+      <Card id="CartaComponentes">
+        <Card.Content>
+        <Card.Header>{this.props.datos.Tipo}</Card.Header><br/>
+          <Image floated='right'  style={{width:'80px', marginLeft: 'auto',marginRight: 'auto',textAlign: 'center'}}src={this.props.img} />
+
+          <Card.Meta>Modelo</Card.Meta>
+          <Card.Header>{this.props.datos.Modelo}</Card.Header><br/>
+          <Card.Meta>Estado de la pieza</Card.Meta>
+          <Card.Header>{this.props.datos.EstadoPieza}</Card.Header><br/>
+          <Card.Meta>ID</Card.Meta>
+          <Card.Header>{this.props.datos.key}</Card.Header><br/>
+
+        </Card.Content>
+
+      </Card>
+      </Slide>
+
     );
   }
 }
