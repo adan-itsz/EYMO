@@ -13,11 +13,19 @@ net.train(TrainingSet.TrainingSet,
 });
 
 // agregar loop que recorra el dataset y correr cada item
-let prediccion=parseFloat(net.run({dsm:.132,duf:.190,fi:.7996,area:.2}));
-if(prediccion>.85){
-  //posiblesFallas.push(item del dataset);
-}
-return (prediccion);
+dataSet.forEach((it)=>{
+
+  console.log(" item a predecir ");
+  let prediccion=parseFloat(net.run(it));
+  if(prediccion>.88){
+    posiblesFallas.push(it);
+  }
+  else{
+    adiccionesDataTraning.push(it);
+  }
+
+})
+  return {fallas:posiblesFallas,adicciones:adiccionesDataTraning};
 }
 
 
