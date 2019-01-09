@@ -45,13 +45,7 @@ app.get('/', function(req, res){
 
   cron.schedule('0 */2 * * * *', () => { // acciona tarea todos los dias a las 9:30 am
     console.log('enter cron');
-    let datosTotales=obtenerDatosTotales();
-    let dataSet= Normalizar.normalizar(datosTotales);
-    let prediccion= Red.Red(dataSet);
-    console.log(prediccion);
-  });
-
-  function obtenerDatosTotales(){
+    let datosTotales;
     var ArrayAux=[];
     let self=this;
     var refDB=dataBase.ref("Ing_Tala/Areas/");
@@ -72,10 +66,22 @@ app.get('/', function(req, res){
         })
         promise.then(
           function(){
-            return ArrayAux;
+
+           let dataSet= Normalizar.normalizar(ArrayAux);
+           let prediccion= Red.Red(dataSet);
+           console.log(prediccion);
 
           }
         )
+
+
+
+
+
+  });
+
+  function obtenerDatosTotales(){
+
   }
 
 
@@ -102,11 +108,7 @@ app.post('/ConsultaAnalitics', function (req, res) {
       })
       promise.then(
         function(){
-
-        var a = obtenerMaquinas(ArrayAux);
-        var b = obtenerComponentes(ArrayAux);
-        var c =  obtenerAreas(ArrayAux);
-        var d =  obtenerMantenimientos(ArrayAux);
+  
 
 
           res.send({TotalMaquinas:a, TotalComponentes:b,TotalAreas:c,TotalMantenimientos:d});
@@ -125,39 +127,154 @@ function  obtenerMaquinas(data){
     }
     return(count);
   }
+
+
+
+
+
 function  obtenerComponentes(data){
-    var count=0;
-    var count2=0;
-    for (var i = 0; i < data.length; i++) {
-     count = Object.keys(data[i]).length ;
-     for (var j = 0; j < count; j++) {
-       var aux = Object.keys(data[i])[j];
-         count2 += Object.keys(data[i][aux].Componentes).length ;
-     }
-    }
-    return(count2);
+  var count=0;
+  var count2=0;
+  var count3 =0;
+
+  if (data != undefined) {
+    for (var i = 0; i < data.length; i++) {     //for que recorre cada area
+      count = Object.keys(data[i]).length ; // cantidad de maquinas
+      for (var j = 0; j < count; j++) { //for de cada maquina
+        if (Object.keys(data[i])[j] != undefined) {
+          var aux = Object.keys(data[i])[j];  //nombre de cada mquina
+            count2 = Object.keys(data[i][aux].Componentes).length ; //cantidad de componentes (Luces,Motores,Rodamientos)
+            for (var k = 0; k < count2; k++) {      //for de componentes (Luces,Motores,Rodamientos)
+              if (Object.keys(data[i][aux].Componentes)[k] != undefined) {
+                var aux2 = Object.keys(data[i][aux].Componentes)[k]; //nombre del componente (Luces,Motores,Rodamientos)
+                 count3 += Object.keys(data[i][aux].Componentes[aux2]).length; //cantidad de componentes especificos
+              } //if componentes especificos
+            } //for componentes (Luces,Roamientos, Motores)
+          } //if maquina existe
+        }//for cada maquina
+      } //for area
+    }  //if area existe
+
+    return(count3);
   }
 
 
 function  obtenerMantenimientos(data){
-    var count=0;
-    var count2=0;
-    for (var i = 0; i < data.length; i++) {
-     count = Object.keys(data[i]).length ;
-     for (var j = 0; j < count; j++) {
-       var aux = Object.keys(data[i])[j];
-       if (data[i][aux].Mantenimientos) {
+  var dataSet=[];
+  var fechas=[];
+  var count=0;
+  var count2=0;
+  var count3 =0;
+  var count4 = 0;
+  if (data != undefined) {
+    for (var i = 0; i < data.length; i++) {     //for que recorre cada area
+      count = Object.keys(data[i]).length ; // cantidad de maquinas
+      for (var j = 0; j < count; j++) { //for de cada maquina
+        if (Object.keys(data[i])[j] != undefined) {
+          var aux = Object.keys(data[i])[j];  //nombre de cada mquina
+            count2 = Object.keys(data[i][aux].Componentes).length ; //cantidad de componentes (Luces,Motores,Rodamientos)
+            for (var k = 0; k < count2; k++) {      //for de componentes (Luces,Motores,Rodamientos)
+              if (Object.keys(data[i][aux].Componentes)[k] != undefined) {
+                var aux2 = Object.keys(data[i][aux].Componentes)[k]; //nombre del componente (Luces,Motores,Rodamientos)
+                count3 = Object.keys(data[i][aux].Componentes[aux2]).length; //cantidad de componentes especificos
+                for (var l = 0; l < count3; l++) {  //cantidad de componentes especificos
+                  if (Object.keys(data[i][aux].Componentes[aux2])[l] != undefined) {
+                    var aux3 = Object.keys(data[i][aux].Componentes[aux2])[l];  //nombre (key) de el compoennete especifico
+                    var Compo = data[i][aux].Componentes[aux2][aux3].FechaInstalacion;  //  path directo a fechaI de cada componente
+                    if (Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos)) {
+                      count4 += Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos).length; //cantidad de mantenimientos
+                    } //if Mantenimiento existe
 
-       count2 += Object.keys(data[i][aux].Mantenimientos).length ;
-        }
-
-     }
-
+                  } //if existe key (componente especifico)
+                } //for cantidad de componentes especificos
+              } //if componentes especificos
+            } //for componentes (Luces,Roamientos, Motores)
+          } //if maquina existe
+        }//for cada maquina
+      } //for area
     }
-    return(count2);
+
+    return(count4);
   }
 function  obtenerAreas(data){
     return(data.length);
+  }
+
+  function AgenteConMasMtos(data) {
+
+    var Agentes=[];
+    var count=0;
+    var count2=0;
+    var count3 =0;
+    var count4 = 0;
+
+    if (data != undefined) {
+      for (var i = 0; i < data.length; i++) {     //for que recorre cada area
+        count = Object.keys(data[i]).length ; // cantidad de maquinas
+        for (var j = 0; j < count; j++) { //for de cada maquina
+          var aux = Object.keys(data[i])[j];  //nombre de cada mquina
+
+          if (Object.keys(data[i])[j] != undefined) {
+            var aux = Object.keys(data[i])[j];  //nombre de cada mquina
+              count2 = Object.keys(data[i][aux].Componentes).length ; //cantidad de componentes (Luces,Motores,Rodamientos)
+              for (var k = 0; k < count2; k++) {      //for de componentes (Luces,Motores,Rodamientos)
+                if (Object.keys(data[i][aux].Componentes)[k] != undefined) {
+                  var aux2 = Object.keys(data[i][aux].Componentes)[k]; //nombre del componente (Luces,Motores,Rodamientos)
+                  count3 = Object.keys(data[i][aux].Componentes[aux2]).length; //cantidad de componentes especificos
+                  for (var l = 0; l < count3; l++) {  //cantidad de componentes especificos
+                    if (Object.keys(data[i][aux].Componentes[aux2])[l] != undefined) {
+                      var aux3 = Object.keys(data[i][aux].Componentes[aux2])[l];  //nombre (key) de el compoennete especifico
+                      var Compo = data[i][aux].Componentes[aux2][aux3].FechaInstalacion;  //  path directo a fechaI de cada componente
+                      if (data[i][aux].Componentes[aux2][aux3].Mantenimientos != undefined) {
+                        count4 = Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos).length; //cantidad de mantenimientos
+                        for (var m = 0; m < count4; m++) {  //for de mantenimientos
+                          if (Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos)[m] != undefined) {
+
+                            var auxMto = Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos)[m]; //key de cada mto
+                            var Mto = data[i][aux].Componentes[aux2][aux3].Mantenimientos[auxMto]; //mantenimiento
+                            if(Mto.Encargado){
+                              var nombre = Mto.Encargado;
+                              if (Agentes[nombre]) {
+                                  Agentes[nombre] += 1;
+                              }
+                              else {
+                                Agentes[nombre] = 1;
+
+                              }
+                              umc=Mto.FechaDeSubida;
+                            }
+
+                          }
+                        }
+                      }
+
+                    } //if existe key (componente especifico)
+                  } //for cantidad de componentes especificos
+                } //if componentes especificos
+              } //for componentes (Luces,Roamientos, Motores)
+            } //if maquina existe
+          }//for cada maquina
+        } //for area
+      }  //if area existe
+
+      var auxAgentes = Ordenar(Agentes);
+      return(auxAgentes);
+  }
+
+  function Ordenar (Agentes){
+     var a = arrayMaxIndex(Agentes);
+
+  }
+  function arrayMaxIndex(array) {
+  var aux = getAllIndexes(array, Math.max.apply(Math,array)) ;
+    return aux;  //saca el valor minimo del arreglo y lo pasa a otro metodo para guardar el index
+  }
+  function getAllIndexes(arr, val) {
+    var indexes = [], i = -1;   //pasa el valor menor y saca los indices de todos los que tienen el valor minimo
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes+" | "+val;
   }
 
 

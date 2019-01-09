@@ -199,7 +199,32 @@ class navbar extends Component{
            EstadoActual:"Usada"
          })
        }
+     }
+     NuevaC =(event) =>{
 
+       if (event.key=="1") {
+         this.setState({
+           NuevaC:"Nueva"
+         })
+       }
+       else {
+         this.setState({
+           NuevaC:"Usada"
+         })
+       }
+     }
+     CorrienteC =(event) =>{
+
+       if (event.key=="1") {
+         this.setState({
+           CorrienteC:"AC"
+         })
+       }
+       else {
+         this.setState({
+           CorrienteC:"DC"
+         })
+       }
      }
      AreaM =(event) =>{
        this.setState({
@@ -325,7 +350,8 @@ class navbar extends Component{
     handleSubmit = (e) => {
       e.preventDefault()
       var ArrayAux = [];
-     this.state.ArrayComponentes.push({Tipo:this.state.NombreComponente,Modelo_Componente:this.modeloC.value,FechaI_Componente:this.fechaC.value,Estado_Componente:this.NuevaC.value,Corriente_Componente:this.CorrienteC.value});
+      var a =
+     this.state.ArrayComponentes.push({Tipo:this.state.NombreComponente,Modelo_Componente:this.modeloC.value,FechaI_Componente:this.fechaC.value,Estado_Componente:this.state.NuevaC,Corriente_Componente:this.state.CorrienteC});
 
       this.modeloC.value = "";
       this.fechaC.value ="";
@@ -339,7 +365,7 @@ class navbar extends Component{
     }
     handleSubmitMantenimiento =(e)=>{
       var date = new Date();
-      var fecha = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
+      var fecha = (date.getFullYear()+'/'+date.getMonth()+1)+'/'+date.getDate();
       var self = this;
       var user =firebase.auth().currentUser;
       axios.post(`http://localhost:4000/Subir_Mantenimiento`,{
@@ -553,9 +579,6 @@ handleChangePreventivo = (e) => {
 
 
              <div className="agregarComponentes">
-             <Button className="botonplus" onClick={() => this.AgregarComponente("Motor_electrico")}>
-               Motor <br/>Electrico <br/><Icon type="plus" />
-             </Button>
               <Button className="botonplus" onClick={() => this.AgregarComponente("Motor_electrico")}>
                 Motor <br/>Electrico <br/><Icon type="plus" />
               </Button>
