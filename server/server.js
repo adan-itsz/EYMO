@@ -8,7 +8,7 @@ var cron = require('node-cron');
 var Normalizar=require('./normalizacionNN.js');
 var Red=require('./neuralNet.js');
 var serviceAccount = require("./eymo-91ecd-firebase-adminsdk-jw962-76b11e34f9.json");
-
+var uploadNewTraining= require('./uploadTraining.js');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://eymo-91ecd.firebaseio.com",
@@ -58,7 +58,6 @@ app.get('/', function(req, res){
               })
             }
             else{
-              console.log('hello');
               resolve();
             }
           });
@@ -66,10 +65,12 @@ app.get('/', function(req, res){
         })
         promise.then(
           function(){
+           let training= uploadNewTraining.downloadTraining(dataBase, Normalizar, ArrayAux,Red,uploadNewTraining);
+          // let dataSet= Normalizar.normalizar(ArrayAux);
+           //let prediccion= Red.Red(dataSet);//.adicciones y .fallas
+           // uploadNewTraining.uploadNewTraining(prediccion.adicciones,0,dataBase);
 
-           let dataSet= Normalizar.normalizar(ArrayAux);
-           let prediccion= Red.Red(dataSet);
-           console.log(prediccion);
+           //console.log(prediccion);
 
           }
         )
