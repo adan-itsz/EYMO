@@ -174,12 +174,30 @@ class navbar extends Component{
           TipoMto:"",
          MetodoMto:"",
        });
-       this.ComponenteMtm.value = "";
-       this.Costo.value = "";
-       this.Tiempo.value="";
-       this.Remplazo.value="";
-       this.AreaMtm.value="";
-       this.MaquinaMtm.value="";
+       if (this.ComponenteMtm) {
+            this.ComponenteMtm.value = "";
+       }
+       if (this.Costo) {
+         this.Costo.value = "";
+
+       }
+       if (this.Tiempo) {
+         this.Tiempo.value="";
+       }
+       if (this.Remplazo) {
+         this.Remplazo.value="";
+       }
+       if (this.AreaMtm) {
+         this.AreaMtm.value="";
+       }
+       if (this.MaquinaMtm) {
+         this.MaquinaMtm.value="";
+       }
+
+
+
+
+
      }
 
      NombreM =(event) =>{

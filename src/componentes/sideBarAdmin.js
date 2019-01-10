@@ -170,6 +170,18 @@ class navbar extends Component{
     </Link>
     </NavItem>
 
+    <NavItem>
+    <Link to="/admin/MtosPendientes">
+      <NavItem >
+        <NavIcon>
+          <i class="material-icons" style={{ fontSize: '2em' }}>error</i>
+        </NavIcon>
+        <NavText>
+          Posibles Fallas
+        </NavText>
+      </NavItem>
+    </Link>
+    </NavItem>
 
     <NavItem>
     <Link to="/admin/Mantenimientos">

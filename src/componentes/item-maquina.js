@@ -13,6 +13,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import BarraLateral from '../componentes/sideBar.js';
 
 import axios from 'axios';
 
@@ -247,7 +248,8 @@ var self=this;
 
 
     return (
-
+      <div>
+      <BarraLateral/>
      <div className='contenido-card'>
       <Modal
               title="Nuevo Componente"
@@ -446,6 +448,7 @@ var self=this;
     </List>
 
       </div>
+      </div>
 
     );
   }
@@ -459,6 +462,7 @@ class Carta extends Component{
           <List.Header style={{fontSize: "20px"}}>{this.props.datos.Encargado}</List.Header>
           <List.Description as='a'>Area : {this.props.datos.Area}</List.Description>
           <List.Description as='a'>Tiempo  : {this.props.datos.Tiempo} minutos </List.Description>
+          <List.Description as='a'>Tipo  : {this.props.datos.TipoMan}  </List.Description>
           <List.Description as='a'>Costo : {this.props.datos.Costo}</List.Description>
         </List.Content>
       </List.Item>

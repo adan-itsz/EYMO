@@ -114,7 +114,7 @@ app.post('/ConsultaAnalitics', function (req, res) {
       })
       promise.then(
         function(){
-  
+
 
         var w = AgenteConMasMtos.AgenteConMasMtos(ArrayAux);
         var x = AreaConMasMtos.AreaConMasMtos(ArrayAux);
@@ -278,19 +278,166 @@ function  obtenerAreas(data){
     }
     );
 
+    app.post('/Fallas', function (req, res) {
+
+      var ArrayAux=[];
+      let self=this;
+      var refDB=dataBase.ref("Ing_Tala/posiblesFallas");
+      var promise=new Promise(
+        function(resolve,reject){
+            refDB.on('value', snapshot=> {
+              if(snapshot.exists()){
+                snapshot.forEach(function(snapchild){
+                  if (snapchild.val().area) {
+                    resolve(ArrayAux = ArrayAux.concat([{area:snapchild.val().area, componente:snapchild.val().componente,maquina:snapchild.val().maquina}]))
+                  }
+                  })
+              }
+              else{
+                console.log('hello');
+                resolve();
+              }
+            });
+
+          })
+          promise.then(
+            function(){
+              res.send({Fallas:ArrayAux});
+
+            }
+          )
+
+
+      });
+
 app.post('/MtoMaquina', function (req, res) {
 
   var ArrayAux=[];
   let self=this;
-  var refDB=dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Mantenimientos");
+  var refDB=dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina);
   var promise=new Promise(
     function(resolve,reject){
-        refDB.on('value', snapshot=> {
-          if(snapshot.exists()){
-            snapshot.forEach(function(snapchild){
-              resolve(ArrayAux = ArrayAux.concat([{key:snapchild.key,Area:snapchild.val().Area,Costo:snapchild.val().Costo,Encargado:snapchild.val().Encargado,Maquina:snapchild.val().Maquina,Nueva:snapchild.val().Nueva,Remplazo:snapchild.val().Remplazo,Tiempo:snapchild.val().Tiempo,TipoMantenimiento:snapchild.val().TipoMantenimiento}]))
-              })
-          }
+        refDB.on('value', babychild=> {
+              if(babychild.exists()){
+                 var obt = babychild.val();
+                  var lucesObj1 = babychild.val().Componentes.Luces;
+                  var IndicadorObj1 = babychild.val().Componentes.Indicador_VF;
+                  var MotoresObj1 = babychild.val().Componentes.Motor_electrico;
+                  var RodamientosObj1 = babychild.val().Componentes.Rodamiento;
+
+                  if(lucesObj1){
+                    Object.keys(lucesObj1).forEach(function(key){
+                      var lucesObj = lucesObj1[key].Mantenimientos;
+                      if(lucesObj){
+                      Object.keys(lucesObj).forEach(function(key){
+                      resolve(ArrayAux = ArrayAux.concat([{
+                        key:key,
+                        Tipo:lucesObj[key].Tipo,
+                        ObjetivoMtoPreventivo:lucesObj[key].ObjetivoMtoPreventivo,
+                        ObjetivoMtoCorrectivo:lucesObj[key].ObjetivoMtoCorrectivo,
+                        Componente:lucesObj[key].Componente,
+                        TipoMan:lucesObj[key].TipoMan,
+                        TipoMantenimiento:lucesObj[key].TipoMantenimiento,
+                        Costo:lucesObj[key].Costo,
+                        Encargado:lucesObj[key].Encargado,
+                        UidEncargado:lucesObj[key].UidEncargado,
+                        Tiempo:lucesObj[key].Tiempo,
+                        Nueva:lucesObj[key].Nueva,
+                        Area:lucesObj[key].Area,
+                        Maquina:lucesObj[key].Maquina,
+                        MetodoMto:lucesObj[key].MetodoMto,
+                        FechaDeSubida:lucesObj[key].FechaDeSubida,
+                      }]))
+                    })
+                  }
+                  })
+
+                  }
+                  if(IndicadorObj1){
+                  Object.keys(IndicadorObj1).forEach(function(key){
+                    var IndicadorObj=IndicadorObj1[key].Mantenimientos
+                    if (IndicadorObj) {
+
+                    Object.keys(IndicadorObj).forEach(function(key){
+                        resolve(ArrayAux = ArrayAux.concat([{
+                            key:key,
+                            Tipo:IndicadorObj[key].Tipo,
+                            ObjetivoMtoPreventivo:IndicadorObj[key].ObjetivoMtoPreventivo,
+                            ObjetivoMtoCorrectivo:IndicadorObj[key].ObjetivoMtoCorrectivo,
+                            Componente:IndicadorObj[key].Componente,
+                            TipoMan:IndicadorObj[key].TipoMan,
+                            TipoMantenimiento:IndicadorObj[key].TipoMantenimiento,
+                            Costo:IndicadorObj[key].Costo,
+                            Encargado:IndicadorObj[key].Encargado,
+                            UidEncargado:IndicadorObj[key].UidEncargado,
+                            Tiempo:IndicadorObj[key].Tiempo,
+                            Nueva:IndicadorObj[key].Nueva,
+                            Area:IndicadorObj[key].Area,
+                            Maquina:IndicadorObj[key].Maquina,
+                            MetodoMto:IndicadorObj[key].MetodoMto,
+                            FechaDeSubida:IndicadorObj[key].FechaDeSubida,
+                      }]))
+                     })
+                   }
+                    })
+                  }
+                  if(MotoresObj1){
+                    Object.keys(MotoresObj1).forEach(function(key){
+                      var MotoresObj = MotoresObj1[key].Mantenimientos;
+                      if (MotoresObj) {
+                      Object.keys(MotoresObj).forEach(function(key){
+                      resolve(ArrayAux = ArrayAux.concat([{
+                        key:key,
+                        Tipo:MotoresObj[key].Tipo,
+                        ObjetivoMtoPreventivo:MotoresObj[key].ObjetivoMtoPreventivo,
+                        ObjetivoMtoCorrectivo:MotoresObj[key].ObjetivoMtoCorrectivo,
+                        Componente:MotoresObj[key].Componente,
+                        TipoMan:MotoresObj[key].TipoMan,
+                        TipoMantenimiento:MotoresObj[key].TipoMantenimiento,
+                        Costo:MotoresObj[key].Costo,
+                        Encargado:MotoresObj[key].Encargado,
+                        UidEncargado:MotoresObj[key].UidEncargado,
+                        Tiempo:MotoresObj[key].Tiempo,
+                        Nueva:MotoresObj[key].Nueva,
+                        Area:MotoresObj[key].Area,
+                        Maquina:MotoresObj[key].Maquina,
+                        MetodoMto:MotoresObj[key].MetodoMto,
+                        FechaDeSubida:MotoresObj[key].FechaDeSubida,
+                      }]))
+                    })
+                  }
+                    })
+                  }
+                  if(RodamientosObj1){
+                    Object.keys(RodamientosObj1).forEach(function(key){
+                      var RodamientosObj= RodamientosObj1[key].Mantenimientos;
+                      if (RodamientosObj) {
+                      Object.keys(RodamientosObj).forEach(function(key){
+                      resolve(ArrayAux = ArrayAux.concat([{
+                        key:key,
+                        Tipo:RodamientosObj[key].Tipo,
+                        ObjetivoMtoPreventivo:RodamientosObj[key].ObjetivoMtoPreventivo,
+                        ObjetivoMtoCorrectivo:RodamientosObj[key].ObjetivoMtoCorrectivo,
+                        Componente:RodamientosObj[key].Componente,
+                        TipoMan:RodamientosObj[key].TipoMan,
+                        TipoMantenimiento:RodamientosObj[key].TipoMantenimiento,
+                        Costo:RodamientosObj[key].Costo,
+                        Encargado:RodamientosObj[key].Encargado,
+                        UidEncargado:RodamientosObj[key].UidEncargado,
+                        Tiempo:RodamientosObj[key].Tiempo,
+                        Nueva:RodamientosObj[key].Nueva,
+                        Area:RodamientosObj[key].Area,
+                        Maquina:RodamientosObj[key].Maquina,
+                        MetodoMto:RodamientosObj[key].MetodoMto,
+                        FechaDeSubida:RodamientosObj[key].FechaDeSubida,
+                      }]))
+                    })
+                  }
+                  })
+                  }
+
+                }
+
           else{
             console.log('hello');
             resolve();
@@ -595,7 +742,7 @@ app.post('/Subir_Mantenimiento', function (req, res) {
     });
     if(req.body.TipoMan=="Correctivo"){
        var newData=uploadMant.uploadMant(dataBase,ruta);
-       
+
     }
 
 
@@ -628,6 +775,36 @@ app.post('/AreasDisponibles', function (req, res) {
         function(){
 
           res.send({Areas:ArrayAux});
+
+        }
+      )
+});
+
+
+
+app.post('/PerfilUser', function (req, res) {
+
+  var ArrayAux=[];
+  let self=this;
+  var refDB=dataBase.ref("Ing_Tala/Agentes/"+req.body.Id);
+  var promise=new Promise(
+    function(resolve,reject){
+        refDB.on('value', child=> {
+          if(child.exists()){
+              resolve(ArrayAux = ArrayAux.concat([{Area:child.val().Area, Edad:child.val().Edad, Profesion:child.val().Profesion, displayName:child.val().displayName, email : child.val().email}]))
+
+          }
+          else{
+            console.log('hello');
+            resolve();
+          }
+        });
+
+      })
+      promise.then(
+        function(){
+
+          res.send({Agente:ArrayAux});
 
         }
       )
