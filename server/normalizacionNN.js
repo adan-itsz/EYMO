@@ -49,7 +49,7 @@ function normalizar(data){
 
                         }
                       }
-                      dataSet.push({dsm:fechas.mc,duf:fechas.mp,fi:FechaInstalacion,area:area,nombreComponente:componente,maquina:maquina});
+                      dataSet.push({dsm:fechas.mp,duf:fechas.mc,fi:FechaInstalacion,area:area,nombreComponente:componente,maquina:maquina});
                     } //if existe key (componente especifico)
                   } //for cantidad de componentes especificos
                 } //if componentes especificos
@@ -75,3 +75,4 @@ function normalizar(data){
   }
 
   exports.normalizar=normalizar;
+  exports.contarDias=contarDias;

@@ -4,7 +4,7 @@ import Analitics from '../componentes/Analitics.js'
 import Agentes from '../componentes/AgentesDisponibles.js';
 import ItemMaquina from '../componentes/item-maquina.js';
 import BarraLateral from '../componentes/sideBarAdmin.js';
-import MantenimientoItem from '../componentes/Mantenimientos.js';
+import MantenimientoItem from '../componentes/MantenimientosAdmin.js';
 class UserRoutes extends Component {
   constructor(){
     super()

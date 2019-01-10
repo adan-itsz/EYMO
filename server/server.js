@@ -5,10 +5,15 @@ const cors = require('cors');
 var admin = require("firebase-admin");
 const format = require('util').format;
 var cron = require('node-cron');
+var AgenteConMasMtos = require('./AgentesMayorMtos.js')
+var AreaConMasMtos = require('./AreasMayorMtos.js')
+var MaquinaConMasMtos = require('./MaquinasMayorMtos.js')
+var Costos = require('./CostoPromedio.js')
 var Normalizar=require('./normalizacionNN.js');
 var Red=require('./neuralNet.js');
 var serviceAccount = require("./eymo-91ecd-firebase-adminsdk-jw962-76b11e34f9.json");
 var uploadNewTraining= require('./uploadTraining.js');
+var UploadMant=require('./uploadMant.js');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://eymo-91ecd.firebaseio.com",
@@ -111,8 +116,17 @@ app.post('/ConsultaAnalitics', function (req, res) {
         function(){
   
 
+        var w = AgenteConMasMtos.AgenteConMasMtos(ArrayAux);
+        var x = AreaConMasMtos.AreaConMasMtos(ArrayAux);
+        var z = MaquinaConMasMtos.MaquinaConMasMtos(ArrayAux);
+        var costos = Costos.Costos(ArrayAux);
+        var a = obtenerMaquinas(ArrayAux);
+        var b = obtenerComponentes(ArrayAux);
+        var c =  obtenerAreas(ArrayAux);
+        var d =  obtenerMantenimientos(ArrayAux);
 
-          res.send({TotalMaquinas:a, TotalComponentes:b,TotalAreas:c,TotalMantenimientos:d});
+
+          res.send({CostosPromedio:costos,TopArea:x,TopMaquinas:z,TopAgentes:w,TotalMaquinas:a, TotalComponentes:b,TotalAreas:c,TotalMantenimientos:d});
 
         }
       )
@@ -201,82 +215,6 @@ function  obtenerAreas(data){
     return(data.length);
   }
 
-  function AgenteConMasMtos(data) {
-
-    var Agentes=[];
-    var count=0;
-    var count2=0;
-    var count3 =0;
-    var count4 = 0;
-
-    if (data != undefined) {
-      for (var i = 0; i < data.length; i++) {     //for que recorre cada area
-        count = Object.keys(data[i]).length ; // cantidad de maquinas
-        for (var j = 0; j < count; j++) { //for de cada maquina
-          var aux = Object.keys(data[i])[j];  //nombre de cada mquina
-
-          if (Object.keys(data[i])[j] != undefined) {
-            var aux = Object.keys(data[i])[j];  //nombre de cada mquina
-              count2 = Object.keys(data[i][aux].Componentes).length ; //cantidad de componentes (Luces,Motores,Rodamientos)
-              for (var k = 0; k < count2; k++) {      //for de componentes (Luces,Motores,Rodamientos)
-                if (Object.keys(data[i][aux].Componentes)[k] != undefined) {
-                  var aux2 = Object.keys(data[i][aux].Componentes)[k]; //nombre del componente (Luces,Motores,Rodamientos)
-                  count3 = Object.keys(data[i][aux].Componentes[aux2]).length; //cantidad de componentes especificos
-                  for (var l = 0; l < count3; l++) {  //cantidad de componentes especificos
-                    if (Object.keys(data[i][aux].Componentes[aux2])[l] != undefined) {
-                      var aux3 = Object.keys(data[i][aux].Componentes[aux2])[l];  //nombre (key) de el compoennete especifico
-                      var Compo = data[i][aux].Componentes[aux2][aux3].FechaInstalacion;  //  path directo a fechaI de cada componente
-                      if (data[i][aux].Componentes[aux2][aux3].Mantenimientos != undefined) {
-                        count4 = Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos).length; //cantidad de mantenimientos
-                        for (var m = 0; m < count4; m++) {  //for de mantenimientos
-                          if (Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos)[m] != undefined) {
-
-                            var auxMto = Object.keys(data[i][aux].Componentes[aux2][aux3].Mantenimientos)[m]; //key de cada mto
-                            var Mto = data[i][aux].Componentes[aux2][aux3].Mantenimientos[auxMto]; //mantenimiento
-                            if(Mto.Encargado){
-                              var nombre = Mto.Encargado;
-                              if (Agentes[nombre]) {
-                                  Agentes[nombre] += 1;
-                              }
-                              else {
-                                Agentes[nombre] = 1;
-
-                              }
-                              umc=Mto.FechaDeSubida;
-                            }
-
-                          }
-                        }
-                      }
-
-                    } //if existe key (componente especifico)
-                  } //for cantidad de componentes especificos
-                } //if componentes especificos
-              } //for componentes (Luces,Roamientos, Motores)
-            } //if maquina existe
-          }//for cada maquina
-        } //for area
-      }  //if area existe
-
-      var auxAgentes = Ordenar(Agentes);
-      return(auxAgentes);
-  }
-
-  function Ordenar (Agentes){
-     var a = arrayMaxIndex(Agentes);
-
-  }
-  function arrayMaxIndex(array) {
-  var aux = getAllIndexes(array, Math.max.apply(Math,array)) ;
-    return aux;  //saca el valor minimo del arreglo y lo pasa a otro metodo para guardar el index
-  }
-  function getAllIndexes(arr, val) {
-    var indexes = [], i = -1;   //pasa el valor menor y saca los indices de todos los que tienen el valor minimo
-    while ((i = arr.indexOf(val, i+1)) != -1){
-        indexes.push(i);
-    }
-    return indexes+" | "+val;
-  }
 
 
   app.post('/CompoMaquina', function (req, res) {
@@ -386,8 +324,8 @@ app.post('/MtoMaquina', function (req, res) {
                    var obt = babychild.val();
                     var lucesObj1 = babychild.val().Componentes.Luces;
                     var IndicadorObj1 = babychild.val().Componentes.Indicador_VF;
-                    var MotoresObj1 = babychild.val().Componentes.Motores;
-                    var RodamientosObj1 = babychild.val().Componentes.Rodamientos;
+                    var MotoresObj1 = babychild.val().Componentes.Motor_electrico;
+                    var RodamientosObj1 = babychild.val().Componentes.Rodamiento;
 
                     if(lucesObj1){
                       Object.keys(lucesObj1).forEach(function(key){
@@ -635,8 +573,8 @@ app.post('/Subir_Agente', function (req, res) {
 
 app.post('/Subir_Mantenimiento', function (req, res) {
 
-
-    var refDaComponentes = dataBase.ref("Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Componentes/"+req.body.Componente+"/Mantenimientos");
+    var ruta="Ing_Tala/Areas/"+req.body.Area+"/"+req.body.Maquina+"/Componentes/"+req.body.Componente;
+    var refDaComponentes = dataBase.ref(ruta+"/Mantenimientos");
 
     var PushComponentes=refDaComponentes.push();
     PushComponentes.set({
@@ -655,6 +593,10 @@ app.post('/Subir_Mantenimiento', function (req, res) {
       MetodoMto:req.body.MetodoMto,
       FechaDeSubida : req.body.FechaDeSubida,
     });
+    if(req.body.TipoMan=="Correctivo"){
+       var newData=uploadMant.uploadMant(database,ruta);
+       uploadNewTraining.uploadNewTraining(newData,1,database);
+    }
 
 
 

@@ -42,6 +42,25 @@ function downloadTraining(dataBase,Normalizar,ArrayAux,Red,uploadNewTraining){
            let dataSet= Normalizar.normalizar(ArrayAux);
            let prediccion= Red.Red(dataSet,traningRes);//.adicciones y .fallas
            uploadNewTraining.uploadNewTraining(prediccion.adicciones,0,dataBase);
+
+           if(prediccion.fallas!= null){
+            let referencia=dataBase.ref('Ing_Tala/posiblesFallas');
+
+            referencia.set({ x:""},()=>{
+               prediccion.fallas.forEach((it)=>{
+                
+                let refPush=referencia.push();
+                let newArea=Math.round(parseFloat(it.area) *30);
+                refPush.set({
+                  area: newArea,
+                  componente:it.nombreComponente,
+                  maquina:it.maquina
+                })
+
+               })
+              
+            })
+           }
             console.log(prediccion);
           }
         )

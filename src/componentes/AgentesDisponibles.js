@@ -9,6 +9,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import BarraLateral from '../componentes/sideBarAdmin.js';
 
 import axios from 'axios';
 
@@ -16,7 +17,7 @@ import axios from 'axios';
 const months = ["Enero","Febrero","Marzo"];
 
 
-class MantenimientoItem extends Component {
+class AgentesDisponibles extends Component {
   constructor(props){
 
     super(props)
@@ -54,6 +55,8 @@ class MantenimientoItem extends Component {
     const { activeIndex } = this.state
 
     return (
+    <div>
+    <BarraLateral/>
      <div className='contenido-card'>
 
     <List divided verticalAlign='middle' size="big">
@@ -63,6 +66,7 @@ class MantenimientoItem extends Component {
     })}
     </List>
       </div>
+    </div>
     );
   }
 }
@@ -129,4 +133,4 @@ class Carta extends Component{
 
 
 
-export default MantenimientoItem;
+export default AgentesDisponibles;

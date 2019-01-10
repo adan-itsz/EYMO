@@ -9,7 +9,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import BarraLateral from './sideBar.js';
+import BarraLateral from '../componentes/sideBarAdmin.js';
+
 import axios from 'axios';
 import * as firebase from 'firebase'
 
@@ -25,19 +26,9 @@ class MantenimientoItem extends Component {
     var self = this;
     axios.post(`http://localhost:4000/TomarHistorial`)
       .then(res => {
-        var user = firebase.auth().currentUser;
-        console.log("lado del cleinte :: "+res.data);
-        var ArrayAux = [];
-        res.data.Mantenimientos.forEach(function(snap){
-          if (snap.Encargado == user.email) {
-            ArrayAux.push(snap);
-
-            }
-
-          })
 
         this.setState({
-          ArrayMantenimientos:ArrayAux,
+          ArrayMantenimientos:res.data.Mantenimientos,
         })
 
 
@@ -65,6 +56,8 @@ class MantenimientoItem extends Component {
     const { activeIndex } = this.state
 
     return (
+
+
      <div className='contenido-card'>
 
     <List divided verticalAlign='middle' size="big">
