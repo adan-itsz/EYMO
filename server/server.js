@@ -13,7 +13,7 @@ var Normalizar=require('./normalizacionNN.js');
 var Red=require('./neuralNet.js');
 var serviceAccount = require("./eymo-91ecd-firebase-adminsdk-jw962-76b11e34f9.json");
 var uploadNewTraining= require('./uploadTraining.js');
-var UploadMant=require('./uploadMant.js');
+var uploadMant=require('./uploadMant.js');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://eymo-91ecd.firebaseio.com",
@@ -48,7 +48,7 @@ app.get('/', function(req, res){
   });
   */
 
-  cron.schedule('0 */2 * * * *', () => { // acciona tarea todos los dias a las 9:30 am
+  cron.schedule('0 */20 * * * *', () => { // acciona tarea todos los dias a las 9:30 am
     console.log('enter cron');
     let datosTotales;
     var ArrayAux=[];
@@ -594,8 +594,8 @@ app.post('/Subir_Mantenimiento', function (req, res) {
       FechaDeSubida : req.body.FechaDeSubida,
     });
     if(req.body.TipoMan=="Correctivo"){
-       var newData=uploadMant.uploadMant(database,ruta);
-       uploadNewTraining.uploadNewTraining(newData,1,database);
+       var newData=uploadMant.uploadMant(dataBase,ruta);
+       
     }
 
 

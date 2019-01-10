@@ -1,6 +1,8 @@
 var Normalizar=require('./normalizacionNN.js');
 
-function uploadMant(database,ruta){
+function uploadMant(dataBase,ruta){
+  var uploadNewTraining= require('./uploadTraining.js');
+  var contarDias=require('./normalizacionNN.js');
   console.log('entro a downoad');
   var ref =dataBase.ref(ruta);
   let datos=[];
@@ -12,7 +14,7 @@ function uploadMant(database,ruta){
               snapshot.forEach(function(child){
                 instalacion=child.val().FechaInstalacion;
                 child.forEach(function(snapChild){
-                  resolve(datos=datos.concat({fechaMantenimiento:snapChild.val(),
+                  resolve(datos=datos.concat({fechaMantenimiento:snapChild.val().FechaDeSubida,
                     area:snapChild.val().Area,fInstalacion:instalacion,tipo:snapChild.val().TipoMantenimiento }))
                 })
             })
@@ -29,7 +31,11 @@ function uploadMant(database,ruta){
            let umPreventivo;
            let area;
            let fi;
-           datos.forEach((it)=>{
+           datos.forEach((it,idx,array)=>{
+            if(idx===array.length-1){
+
+            }
+            else{
               area=parseInt(it.area)/30;
               fi=parseInt(it.area)/5000;
               if(it.tipo=="Preventivo"){
@@ -38,10 +44,14 @@ function uploadMant(database,ruta){
               else if(it.tipo=="Correctivo"){
                 umCorrectivo=it.fechaMantenimiento;
               }
+            }
+            
            })
            
            var mantenimientosFechas=contarDias.contarDias(umPreventivo,umCorrectivo);
-           return {dsm:mantenimientosFechas.mp,duf:mantenimientosFechas.mc,area:area,fi:fi}
+           let NewData1=[];
+           NewData1.push({dsm:mantenimientosFechas.mp.toString().substr(1),duf:mantenimientosFechas.mc.toString().substr(1),area:area.toString().substr(1),fi:fi.toString().substr(1)});
+           uploadNewTraining.uploadNewTraining(NewData1,1,dataBase);
           }
         )
 

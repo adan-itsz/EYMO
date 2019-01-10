@@ -14,8 +14,8 @@ net.train(training,
 
 // agregar loop que recorra el dataset y correr cada item
 dataSet.forEach((it)=>{
-
-  let prediccion=parseFloat(net.run(it));
+	let dato={dsm:it.dsm,duf:it.duf,fi:it.fi,area:it.area};
+  let prediccion=parseFloat(net.run(dato));
   if(prediccion>.88){
     posiblesFallas.push(it);
   }
